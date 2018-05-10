@@ -21,9 +21,9 @@ class Header extends Component {
       isOpen: false,
       showModalContact: false
     };
-    this.handleOpenCloseMenuUser = this.handleOpenCloseMenuUser.bind(this);
     this.handelShowContact = this.handelShowContact.bind(this);
     this.handleCloseContact = this.handleCloseContact.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
   handelShowContact() {
     this.setState({ showModalContact: true });
@@ -32,12 +32,6 @@ class Header extends Component {
   handleCloseContact() {
     this.setState({ showModalContact: false });
   }
-
-  handleOpenCloseMenuUser() {
-    this.setState(state => {
-      isOpenMenuUser: !state.isOpenMenuUser;
-    });
-  }
   handleOpen = () => {
     this.setState({ isOpen: true });
   };
@@ -45,8 +39,11 @@ class Header extends Component {
   handleClose = () => {
     this.setState({ isOpen: false });
   };
+  handleLogout(){
+    
+  }
+  
   render() {
-    console.log(this.state.isOpenMenuUser);
     return (
       <div>
         <Navbar collapseOnSelect className="header-color">
@@ -66,7 +63,7 @@ class Header extends Component {
             <Nav pullLeft className="nav-link">
               <LinkContainer to="/" activeClassName="nothing">
                 <NavItem eventKey={1}>
-                  <Glyphicon glyph="home" /> Trang chủ
+                  <Glyphicon glyph="home" /> Trang Chủ
                 </NavItem>
               </LinkContainer>
             </Nav>
@@ -85,7 +82,7 @@ class Header extends Component {
             <Nav pullRight className="nav-link">
               <NavDropdown
                 // eventKey={}
-                title="Hi, Thành"
+                title="Hi, Truong Huu Thành"
                 id="basic-nav-dropdown"
                 onMouseEnter={this.handleOpen}
                 onMouseLeave={this.handleClose}
@@ -93,7 +90,7 @@ class Header extends Component {
                 onToggle={this.handleOpen}
                 noCaret               
               >
-                <MenuItem> <Glyphicon glyph="wrench" />  Đổi Mật Khẩu</MenuItem>
+                <MenuItem> <Glyphicon glyph="lock" />  Đổi Mật Khẩu</MenuItem>
                 <MenuItem divider />
                 <MenuItem> <Glyphicon glyph="log-out" /> Đăng Xuất</MenuItem>
               </NavDropdown>

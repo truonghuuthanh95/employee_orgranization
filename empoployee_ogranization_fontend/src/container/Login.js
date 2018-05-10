@@ -17,14 +17,19 @@ class Login extends Component {
         <Col sm={4} mdOffset={4} className="login-box">
           <Panel>
             <Panel.Body>
-                <Image src={require("../resourse/image/logo_so.png")} className="logo-login"/>
+              <div className="text-center">
+                <Image
+                  src={require("../resourse/image/logo_so.png")}
+                  className="logo-login"
+                />
+              </div>
               <form>
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Addon>
                       <Glyphicon glyph="user" />
                     </InputGroup.Addon>
-                    <FormControl type="text" placeholder="Tên đăng nhập"/>
+                    <FormControl type="text" placeholder="Tên đăng nhập" />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>

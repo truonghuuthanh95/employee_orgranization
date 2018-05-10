@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from '../container/Home';
 import Login from '../container/Login';
 import Table from '../container/Table';
-
+import NotFound from '../container/NotFound';
+import RegistrationInterview from '../container/RegistrationInterview';
+import CashierExportBill from '../container/CashierExportBill';
 class App extends Component {
     render() {
       return (
@@ -14,6 +16,10 @@ class App extends Component {
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/table" component={Table} />
+                <Route exact path="/dangkiungtuyen" component={RegistrationInterview} />
+                <Route exact path="/xuathoadondangki" component={CashierExportBill} />
+
+                <Route exact component={NotFound} />
               </Switch>
             </Router>
           </div>
