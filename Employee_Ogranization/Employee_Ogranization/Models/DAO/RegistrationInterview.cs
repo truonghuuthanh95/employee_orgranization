@@ -42,7 +42,7 @@ namespace Employee_Ogranization.Models.DAO
 
         public bool? IsPass { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string Email { get; set; }
 
         public int? SubjectToInterviewId { get; set; }
@@ -55,6 +55,27 @@ namespace Employee_Ogranization.Models.DAO
 
         public bool? IsMale { get; set; }
 
+        public int? DegreeClassificationId { get; set; }
+
+        public short? GraduatedAtYear { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? CurrentLivingAddressId { get; set; }
+
+        public int? HouseHoldId { get; set; }
+
+        [StringLength(50)]
+        public string GraduatedAtSubject { get; set; }
+
+        public int? SchoolDegreeIdExpectedTeach { get; set; }
+
+        public virtual Account Account { get; set; }
+
+        public virtual CurrentLivingAddress CurrentLivingAddress { get; set; }
+
+        public virtual DegreeClassification DegreeClassification { get; set; }
+
         public virtual District District { get; set; }
 
         public virtual District District1 { get; set; }
@@ -63,11 +84,15 @@ namespace Employee_Ogranization.Models.DAO
 
         public virtual ForeignLanguageCertification ForeignLanguageCertification { get; set; }
 
+        public virtual HouseHold HouseHold { get; set; }
+
         public virtual InfomationTechnologyDegree InfomationTechnologyDegree { get; set; }
 
         public virtual ManagementUnit ManagementUnit { get; set; }
 
         public virtual ReligionCategory ReligionCategory { get; set; }
+
+        public virtual SchoolDegree SchoolDegree { get; set; }
 
         public virtual Subject Subject { get; set; }
     }

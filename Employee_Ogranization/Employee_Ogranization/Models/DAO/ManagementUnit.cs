@@ -13,6 +13,7 @@ namespace Employee_Ogranization.Models.DAO
         public ManagementUnit()
         {
             Accounts = new HashSet<Account>();
+            RegistrationPrices = new HashSet<RegistrationPrice>();
             RegistrationInterviews = new HashSet<RegistrationInterview>();
         }
 
@@ -25,6 +26,9 @@ namespace Employee_Ogranization.Models.DAO
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Account> Accounts { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegistrationPrice> RegistrationPrices { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegistrationInterview> RegistrationInterviews { get; set; }

@@ -9,6 +9,12 @@ namespace Employee_Ogranization.Models.DAO
     [Table("Account")]
     public partial class Account
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Account()
+        {
+            RegistrationInterviews = new HashSet<RegistrationInterview>();
+        }
+
         public int Id { get; set; }
 
         [StringLength(50)]
@@ -31,5 +37,8 @@ namespace Employee_Ogranization.Models.DAO
         public virtual Role Role { get; set; }
 
         public virtual Profile Profile { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegistrationInterview> RegistrationInterviews { get; set; }
     }
 }

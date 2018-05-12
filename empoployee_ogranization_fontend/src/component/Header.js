@@ -90,7 +90,7 @@ class Header extends Component {
                 onToggle={this.handleOpen}
                 noCaret               
               >
-                <MenuItem> <Glyphicon glyph="lock" />  Đổi Mật Khẩu</MenuItem>
+                <MenuItem> <Glyphicon glyph="cog" />  Đổi Mật Khẩu</MenuItem>
                 <MenuItem divider />
                 <MenuItem> <Glyphicon glyph="log-out" /> Đăng Xuất</MenuItem>
               </NavDropdown>

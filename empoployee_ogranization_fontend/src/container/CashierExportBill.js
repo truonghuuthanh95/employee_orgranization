@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import {
+  getRegistrationPriceByMananagementUnitId,
+  checkIdentifyCard,
+  createRegistrationInterview
+} from "../api/cashierAPI";
+import {
   Form,
   FormControl,
   FormGroup,
@@ -7,7 +12,10 @@ import {
   ControlLabel,
   Button,
   Panel,
-  HelpBlock
+  HelpBlock,
+  Row,
+  ButtonGroup,
+  Glyphicon
 } from "react-bootstrap";
 import Header from "../component/Header";
 class CashierExportBill extends Component {
@@ -15,18 +23,30 @@ class CashierExportBill extends Component {
     super(props);
     this.state = {
       identifyCard: "",
-      isvalidIdentifyCard: true,
+      isvalidIdentifyCard: false,
       candidateName: "",
       registrationPrice: "",
       errorIdentifyCard: "",
-      errorCandidateName: ""
+      errorCandidateName: "",
+      priceSelected: "",
+      registrationId: "",
+      isDisableIdentifyCardInput: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmitCheckIndentifyCard = this.handleSubmitCheckIndentifyCard.bind(
       this
     );
     this.handelClickPrintBill = this.handelClickPrintBill.bind(this);
+    this.handleClickCancelPrintBill = this.handleClickCancelPrintBill.bind(
+      this
+    );
   }
+  async componentDidMount() {
+    await getRegistrationPriceByMananagementUnitId(1).then(res =>
+      this.setState({ registrationPrice: res.Value })
+    );
+  }
+
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -35,18 +55,61 @@ class CashierExportBill extends Component {
       [name]: value
     });
   }
-  handleSubmitCheckIndentifyCard(event) {
+  async handleSubmitCheckIndentifyCard(event) {
     event.preventDefault();
     if (this.state.identifyCard === "") {
-      this.setState({ errorIdentifyCard: "Số CMND không được bỏ trống!" });
+      this.setState({ errorIdentifyCard: "Vui lòng nhập số CMND" });
+    } else if (this.state.identifyCard.length < 9) {
+      this.setState({ errorIdentifyCard: "Độ dài số CMND không hợp lệ" });
+    } else {
+      this.setState({
+        errorIdentifyCard: "",
+        isDisableIdentifyCardInput: true
+      });
+      await checkIdentifyCard(this.state.identifyCard).then(res => {
+        if (res.Status === 1) {
+          this.setState({ isvalidIdentifyCard: true });
+        } else if (res.Status === 3) {
+          this.setState({
+            isvalidIdentifyCard: false,
+            errorIdentifyCard:
+              "Thí sinh này đã đậu ở kì tuyển trước đó, và đã được phân đơn vị công tác"
+          });
+        } else if (res.Status === 2) {
+          this.setState({
+            isvalidIdentifyCard: false,
+            errorIdentifyCard: `Thí sinh này đã đăng kí trước đó. Mã đăng kí là ${
+              res.Message
+            }`
+          });
+        }
+      });
     }
   }
-  handelClickPrintBill(event) {
+  handleClickCancelPrintBill(event) {
+    event.preventDefault();
+    this.setState({ isDisableIdentifyCardInput: false, isvalidIdentifyCard: false });
+  }
+  async handelClickPrintBill(event) {
     event.preventDefault();
     if (this.state.candidateName === "") {
       this.setState({ errorCandidateName: "Vui lòng điền tên người đăng kí" });
-    }else{
-      this.setState({errorCandidateName: ''})
+    } else {
+      this.setState({ errorCandidateName: "" });
+      const { identifyCard, registrationPrice, candidateName } = this.state;
+      await createRegistrationInterview(
+        identifyCard,
+        registrationPrice,
+        candidateName
+      ).then(res => {
+        if (res.status === 201) {
+          this.setState({ registrationId: res.Results.Id });
+        } else if (res.Status === 409) {
+          this.setState({
+            errorCreateRegistrationInterview: "Thí sinh này đã tồn tại trong hệ thống"
+          });
+        }
+      });
     }
   }
   render() {
@@ -69,6 +132,7 @@ class CashierExportBill extends Component {
                   name="identifyCard"
                   value={this.state.identifyCard}
                   onChange={this.handleInputChange}
+                  disabled={this.state.isDisableIdentifyCardInput}
                 />
               </FormGroup>{" "}
               <Button type="submit" bsStyle="success">
@@ -80,14 +144,11 @@ class CashierExportBill extends Component {
             <Col sm={8} smOffset={2} className="exportBillBox">
               <Panel>
                 <Panel.Body>
-                  {/* <div className="hidden"> */}
                   <form>
                     <FormGroup
                       controlId="formBasicText"
                       validationState={
-                        this.state.errorCandidateName !== ''
-                          ? "error"
-                          : null
+                        this.state.errorCandidateName !== "" ? "error" : null
                       }
                     >
                       <ControlLabel>Họ tên người đăng kí</ControlLabel>
@@ -103,20 +164,35 @@ class CashierExportBill extends Component {
                     </FormGroup>
                     <FormGroup>
                       <ControlLabel>Lệ phí</ControlLabel>
-                      <FormControl.Static>30.0000 VND</FormControl.Static>
+                      <FormControl.Static>
+                        <b>
+                          <i>{this.state.registrationPrice} VND </i>{" "}
+                        </b>{" "}
+                      </FormControl.Static>
                     </FormGroup>
                   </form>
-                  {/* adsad</div> */}
                 </Panel.Body>
 
                 <Panel.Footer>
-                  <Button
-                    block
-                    bsStyle="primary"
-                    onClick={this.handelClickPrintBill}
-                  >
-                    Xuất hóa đơn
-                  </Button>
+                  <Row>
+                    <Col sm={6} xs={6}>
+                      <Button
+                        bsStyle="danger"
+                        onClick={this.handleClickCancelPrintBill}
+                      >
+                        Hủy
+                      </Button>
+                    </Col>
+                    <Col sm={6} xs={6}>
+                      <Button
+                        block
+                        bsStyle="primary"
+                        onClick={this.handelClickPrintBill}
+                      >
+                        <Glyphicon glyph="print" /> Xuất hóa đơn
+                      </Button>
+                    </Col>
+                  </Row>
                 </Panel.Footer>
               </Panel>
             </Col>

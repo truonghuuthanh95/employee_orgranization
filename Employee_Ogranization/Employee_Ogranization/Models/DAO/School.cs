@@ -29,5 +29,7 @@ namespace Employee_Ogranization.Models.DAO
         public int? SchoolDegreeId { get; set; }
 
         public virtual District District { get; set; }
+
+        public virtual SchoolDegree SchoolDegree { get; set; }
     }
 }
