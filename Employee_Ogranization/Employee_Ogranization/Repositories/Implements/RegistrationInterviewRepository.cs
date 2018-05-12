@@ -19,13 +19,33 @@ namespace Employee_Ogranization.Repositories.Implements
 
         public RegistrationInterview CreateRegistrationInterview(RegistrationInterviewRegister registrationInterviewRegister)
         {
-            throw new NotImplementedException();
+            RegistrationInterview registrationInterview = new RegistrationInterview();
+            registrationInterview.CandidateName = registrationInterviewRegister.CandidateName;
+            registrationInterview.IdentifyCard = registrationInterviewRegister.IdentifyCard;
+            registrationInterview.Price = registrationInterviewRegister.RegistrationPrice;
+            registrationInterview.CreatedAt = DateTime.Now;
+            _db.RegistrationInterviews.Add(registrationInterview);
+            _db.SaveChanges();
+            return GetRegistrationInterviewById(registrationInterview.Id);
         }
 
         public RegistrationInterview GetRegistrationInterviewById(int id)
         {
              RegistrationInterview registrationInterview = _db.RegistrationInterviews.Find(id);
             return registrationInterview;
+        }
+
+        public RegistrationInterview GetRegistrationInterviewByIdAndIdentifyCard(int id, string identifyCard)
+        {
+            RegistrationInterview registrationInterview = _db.RegistrationInterviews.Find(id);
+            if (registrationInterview == null || registrationInterview.IdentifyCard.Trim() != identifyCard)
+            {
+                return null;
+
+            }
+            
+                return registrationInterview;
+            
         }
 
         public List<RegistrationInterview> GetRegistrationInterviewByIdentidfyCard(string identifyCard)

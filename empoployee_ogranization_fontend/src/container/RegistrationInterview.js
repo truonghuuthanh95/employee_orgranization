@@ -14,6 +14,7 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { checkIsValidToUpdateRegistrationInterview } from "../api/candidateAPI";
 class RegistrationInterview extends Component {
   constructor(props) {
     super(props);
@@ -27,10 +28,15 @@ class RegistrationInterview extends Component {
       genderSeleted: 1,
       isValidIdentifyCard: false,
       candidateName: "",
-      identifyCard: ""
+      identifyCard: "",
+      registrationId: "",
+      errorIdentifyCard: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChangeIdentifyCard = this.handleChangeIdentifyCard.bind(this);
+    this.handleSubmitCheckIndentifyCard = this.handleSubmitCheckIndentifyCard.bind(
+      this
+    );
   }
   componentWillMount() {
     //init year of birth to select
@@ -69,8 +75,34 @@ class RegistrationInterview extends Component {
       [name]: value
     });
   }
-  handleSubmitCheckIndentifyCard(event) {
+  async handleSubmitCheckIndentifyCard(event) {
     event.preventDefault();
+    debugger;
+    if (this.state.identifyCard === "") {
+      this.setState({ errorIdentifyCard: "Vui lòng nhập mã hồ sơ và số CMND" });
+    } else if (this.state.identifyCard.length < 9) {
+      this.setState({ errorIdentifyCard: "Độ dài số CMND không hợp lệ" });
+    } else {
+      this.setState({ errorIdentifyCard: "" });
+      await checkIsValidToUpdateRegistrationInterview(
+        this.state.registrationId,
+        this.state.identifyCard
+      ).then(res => {
+        if (res.Status === 200) {
+          this.setState({ isValidIdentifyCard: true });
+        } else if (res.Status === 403) {
+          this.setState({
+            isValidIdentifyCard: false,
+            errorIdentifyCard: "Hết hạn để sửa thông tin đăng kí"
+          });
+        } else if (res.Status === 404) {
+          this.setState({
+            isValidIdentifyCard: false,
+            errorIdentifyCard: "Không tìm thấy hồ sơ đăng kí, Vui lòng thử lại"
+          });
+        }
+      });
+    }
   }
   handleChangeIdentifyCard() {
     this.setState({ isValidIdentifyCard: false });
@@ -88,12 +120,19 @@ class RegistrationInterview extends Component {
             <div className="text-center checkIDBox">
               <Form inline onSubmit={this.handleSubmitCheckIndentifyCard}>
                 <p className="text-warning">
-                  Vui lòng nhập mã hồ sơ đăng kí trong biên lai và nhập số chứng minh nhân
-                  dân sau đó nhấn xác nhận để hệ thống kiểm tra
+                  Vui lòng nhập mã hồ sơ đăng kí trong biên lai và nhập số chứng
+                  minh nhân dân sau đó nhấn xác nhận để hệ thống kiểm tra
                 </p>
+                <p className="text-danger">{this.state.errorIdentifyCard}</p>
                 <FormGroup controlId="formInlineName">
                   <ControlLabel>Mã</ControlLabel>{" "}
-                  <FormControl type="number" placeholder="Mã đăng kí" />
+                  <FormControl
+                    type="number"
+                    placeholder="Mã đăng kí"
+                    name="registrationId"
+                    onChange={this.handleInputChange}
+                    value={this.state.registrationId}
+                  />
                 </FormGroup>{" "}
                 <FormGroup controlId="formInlineEmail">
                   <ControlLabel>Số CMND</ControlLabel>{" "}
@@ -117,8 +156,7 @@ class RegistrationInterview extends Component {
               </Panel.Heading>
               <Panel.Body>
                 <p className="text-center text-warning">
-                  Số CMND 0123123123 hợp lệ để đăng kí. Vui lòng điền thông tin
-                  theo thứ tự
+                  Vui lòng điền thông tin theo thứ tự
                 </p>
                 <form>
                   <Row>

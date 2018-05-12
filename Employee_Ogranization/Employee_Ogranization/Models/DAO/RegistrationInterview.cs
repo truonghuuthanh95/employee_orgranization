@@ -9,7 +9,6 @@ namespace Employee_Ogranization.Models.DAO
     [Table("RegistrationInterview")]
     public partial class RegistrationInterview
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [StringLength(50)]
@@ -69,6 +68,8 @@ namespace Employee_Ogranization.Models.DAO
         public string GraduatedAtSubject { get; set; }
 
         public int? SchoolDegreeIdExpectedTeach { get; set; }
+
+        public int? Price { get; set; }
 
         public virtual Account Account { get; set; }
 

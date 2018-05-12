@@ -14,6 +14,7 @@ namespace Employee_Ogranization.Repositories.Interfaces
         RegistrationInterview GetRegistrationInterviewById(int id);
         List<RegistrationInterview> GetRegistrationInterviewByIdentidfyCard(string identifyCard);
         RegistrationInterview UpdateRegistrationInterview(RegistrationInterview registrationInterview);
+        RegistrationInterview GetRegistrationInterviewByIdAndIdentifyCard(int id, string identifyCard);
 
     }
 }

@@ -49,6 +49,24 @@ namespace Employee_Ogranization.Controllers
                 return new ResponseCheckValidIdentifyCard(1, "valid");
 
         }
+
+
+        [Route("isValidToUpdateRegistrationInterview/{id}/{identifyCard}")]
+        [HttpGet]
+        public ResponseResult IsValidToUpdateRegistrationInterview(int id, string identifyCard)
+        {
+            RegistrationInterview registrationInterview = registrationInterviewRepository.GetRegistrationInterviewByIdAndIdentifyCard(id, identifyCard);
+
+            if (registrationInterview == null)
+            {
+                return new ResponseResult(404, "not found", null);
+            }
+            else if (registrationInterview.CreatedAt.Value.Year != DateTime.Now.Year)
+            {
+                return new ResponseResult(403, "Out of date update", null);
+            }
+            return new ResponseResult(200, "success", registrationInterview);
+        }
         // GET: api/RegistrationInterviews/5
         //[ResponseType(typeof(RegistrationInterview))]
         //public IHttpActionResult GetRegistrationInterview(int id)

@@ -14,7 +14,6 @@ import {
   Panel,
   HelpBlock,
   Row,
-  ButtonGroup,
   Glyphicon
 } from "react-bootstrap";
 import Header from "../component/Header";
@@ -63,12 +62,14 @@ class CashierExportBill extends Component {
       this.setState({ errorIdentifyCard: "Độ dài số CMND không hợp lệ" });
     } else {
       this.setState({
-        errorIdentifyCard: "",
-        isDisableIdentifyCardInput: true
+        errorIdentifyCard: ""
       });
       await checkIdentifyCard(this.state.identifyCard).then(res => {
         if (res.Status === 1) {
-          this.setState({ isvalidIdentifyCard: true });
+          this.setState({
+            isvalidIdentifyCard: true,
+            isDisableIdentifyCardInput: true
+          });
         } else if (res.Status === 3) {
           this.setState({
             isvalidIdentifyCard: false,
@@ -88,7 +89,10 @@ class CashierExportBill extends Component {
   }
   handleClickCancelPrintBill(event) {
     event.preventDefault();
-    this.setState({ isDisableIdentifyCardInput: false, isvalidIdentifyCard: false });
+    this.setState({
+      isDisableIdentifyCardInput: false,
+      isvalidIdentifyCard: false
+    });
   }
   async handelClickPrintBill(event) {
     event.preventDefault();
@@ -106,7 +110,8 @@ class CashierExportBill extends Component {
           this.setState({ registrationId: res.Results.Id });
         } else if (res.Status === 409) {
           this.setState({
-            errorCreateRegistrationInterview: "Thí sinh này đã tồn tại trong hệ thống"
+            errorCreateRegistrationInterview:
+              "Thí sinh này đã tồn tại trong hệ thống"
           });
         }
       });
