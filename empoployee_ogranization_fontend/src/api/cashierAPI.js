@@ -20,7 +20,8 @@ export function checkIdentifyCard(identifyCard) {
 export function createRegistrationInterview(
   identifyCard,
   price,
-  candidateName
+  candidateName,
+  managementUnitId,
 ) {
   return fetch(`${BASE_URL + CREATE_REGISTRATION_INTERVIEW}`, {
     method: "POST",
@@ -30,7 +31,8 @@ export function createRegistrationInterview(
     body: JSON.stringify({
       IdentifyCard: identifyCard,
       RegistrationPrice: price,
-      CandidateName: candidateName
+      CandidateName: candidateName,
+      ManagementUnitId: managementUnitId
     })
   }).then(res => res.json());
 }

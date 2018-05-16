@@ -25,9 +25,10 @@ namespace Employee_Ogranization
             
             
             // Web API configuration and services
-            var cors = new EnableCorsAttribute("http://localhost:3000", "*", "*");
+            //var cors = new EnableCorsAttribute("http://localhost:3000", "*", "*");
             // Web API configuration and services
-            config.EnableCors(cors);
+            //config.EnableCors(cors);
+            //config.UseCros
             // Web API routes
             config.MapHttpAttributeRoutes();
 

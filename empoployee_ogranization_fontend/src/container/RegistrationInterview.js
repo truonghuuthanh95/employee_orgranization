@@ -25,18 +25,20 @@ class RegistrationInterview extends Component {
       yearOfBirthSelected: moment().year() - 40,
       monthOfBirthSelected: 1,
       dayOfBirthSelected: 1,
-      genderSeleted: 1,
       isValidIdentifyCard: false,
       candidateName: "",
       identifyCard: "",
       registrationId: "",
-      errorIdentifyCard: ""
+      errorIdentifyCard: "",
+      registrationInterview:{},
+
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChangeIdentifyCard = this.handleChangeIdentifyCard.bind(this);
     this.handleSubmitCheckIndentifyCard = this.handleSubmitCheckIndentifyCard.bind(
       this
     );
+    this.handleInputChangeRegistrationInterview = this.handleInputChangeRegistrationInterview.bind(this);
   }
   componentWillMount() {
     //init year of birth to select
@@ -75,9 +77,14 @@ class RegistrationInterview extends Component {
       [name]: value
     });
   }
+  handleInputChangeRegistrationInterview(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+    this.setState({['registrationInterview']: {...this.state['registrationInterview'], [name]: value}});
+  }
   async handleSubmitCheckIndentifyCard(event) {
     event.preventDefault();
-    debugger;
     if (this.state.identifyCard === "") {
       this.setState({ errorIdentifyCard: "Vui lòng nhập mã hồ sơ và số CMND" });
     } else if (this.state.identifyCard.length < 9) {
@@ -89,7 +96,7 @@ class RegistrationInterview extends Component {
         this.state.identifyCard
       ).then(res => {
         if (res.Status === 200) {
-          this.setState({ isValidIdentifyCard: true });
+          this.setState({ isValidIdentifyCard: true, registrationInterview: res.Results });
         } else if (res.Status === 403) {
           this.setState({
             isValidIdentifyCard: false,
@@ -171,9 +178,9 @@ class RegistrationInterview extends Component {
                         <FormControl
                           type="text"
                           placeholder="Họ và tên"
-                          name="candidateName"
-                          value={this.state.candidateName}
-                          onChange={this.handleInputChange}
+                          name="CandidateName"
+                          value={this.state.registrationInterview.CandidateName}
+                          onChange={this.handleInputChangeRegistrationInterview}
                         />
                       </FormGroup>
                     </Col>
@@ -181,10 +188,8 @@ class RegistrationInterview extends Component {
                       <FormGroup>
                         <ControlLabel>2.Số CMND</ControlLabel>
                         <FormControl.Static>
-                          02131273971{" "}
-                          <a onClick={this.handleChangeIdentifyCard}>
-                            Thay đổi
-                          </a>
+                         {this.state.registrationInterview.IdentifyCard}
+                          
                         </FormControl.Static>
                       </FormGroup>
                     </Col>
@@ -245,12 +250,12 @@ class RegistrationInterview extends Component {
                         <ControlLabel>4.Giới tính</ControlLabel>
                         <FormControl
                           componentClass="select"
-                          value={this.state.genderSeleted}
-                          onChange={this.handleInputChange}
-                          name="genderSeleted"
+                          value={this.state.registrationInterview.IsMale}
+                          onChange={this.handleInputChangeRegistrationInterview}
+                          name="IsMale"
                         >
-                          <option value="1">Nam</option>
-                          <option value="0">Nữ</option>
+                          <option value="true">Nam</option>
+                          <option value="false">Nữ</option>
                         </FormControl>
                       </FormGroup>
                     </Col>

@@ -6,6 +6,7 @@ import Table from '../container/Table';
 import NotFound from '../container/NotFound';
 import RegistrationInterview from '../container/RegistrationInterview';
 import CashierExportBill from '../container/CashierExportBill';
+import ExportBill from '../component/ExportBill';
 class App extends Component {
     render() {
       return (
@@ -16,8 +17,9 @@ class App extends Component {
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/table" component={Table} />
-                <Route exact path="/dangkiungtuyen" component={RegistrationInterview} />
+                <Route exact path="/hosoungtuyen" component={RegistrationInterview} />
                 <Route exact path="/xuathoadondangki" component={CashierExportBill} />
+                <Route exact path="/abc" component={ExportBill} />
 
                 <Route exact component={NotFound} />
               </Switch>

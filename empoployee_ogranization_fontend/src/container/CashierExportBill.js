@@ -4,6 +4,8 @@ import {
   checkIdentifyCard,
   createRegistrationInterview
 } from "../api/cashierAPI";
+import ExportBill from "../component/ExportBill";
+import ReactToPrint from "react-to-print";
 import {
   Form,
   FormControl,
@@ -29,20 +31,19 @@ class CashierExportBill extends Component {
       errorCandidateName: "",
       priceSelected: "",
       registrationId: "",
-      isDisableIdentifyCardInput: false
+      isDisableIdentifyCardInput: false,
+      errorCreateRegistrationInterview: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmitCheckIndentifyCard = this.handleSubmitCheckIndentifyCard.bind(
       this
     );
     this.handelClickPrintBill = this.handelClickPrintBill.bind(this);
-    this.handleClickCancelPrintBill = this.handleClickCancelPrintBill.bind(
-      this
-    );
+    this.handelClickAddCandidate = this.handelClickAddCandidate.bind(this);
   }
   async componentDidMount() {
     await getRegistrationPriceByMananagementUnitId(1).then(res =>
-      this.setState({ registrationPrice: res.Value })
+      this.setState({ registrationPrice: res })
     );
   }
 
@@ -58,7 +59,10 @@ class CashierExportBill extends Component {
     event.preventDefault();
     if (this.state.identifyCard === "") {
       this.setState({ errorIdentifyCard: "Vui lòng nhập số CMND" });
-    } else if (this.state.identifyCard.length < 9) {
+    } else if (
+      this.state.identifyCard.length < 9 ||
+      this.state.identifyCard.length > 12
+    ) {
       this.setState({ errorIdentifyCard: "Độ dài số CMND không hợp lệ" });
     } else {
       this.setState({
@@ -87,7 +91,10 @@ class CashierExportBill extends Component {
       });
     }
   }
-  handleClickCancelPrintBill(event) {
+  handelClickPrintBill(event) {
+    event.preventDefault();
+  }
+  handelClickAddCandidate(event) {
     event.preventDefault();
     this.setState({
       isDisableIdentifyCardInput: false,
@@ -100,11 +107,13 @@ class CashierExportBill extends Component {
       this.setState({ errorCandidateName: "Vui lòng điền tên người đăng kí" });
     } else {
       this.setState({ errorCandidateName: "" });
+      const account = JSON.parse(sessionStorage.getItem("user"));
       const { identifyCard, registrationPrice, candidateName } = this.state;
       await createRegistrationInterview(
         identifyCard,
         registrationPrice,
-        candidateName
+        candidateName,
+        account.ManagementUnitId
       ).then(res => {
         if (res.status === 201) {
           this.setState({ registrationId: res.Results.Id });
@@ -171,7 +180,7 @@ class CashierExportBill extends Component {
                       <ControlLabel>Lệ phí</ControlLabel>
                       <FormControl.Static>
                         <b>
-                          <i>{this.state.registrationPrice} VND </i>{" "}
+                          <i>{this.state.registrationPrice.Value} VND </i>{" "}
                         </b>{" "}
                       </FormControl.Static>
                     </FormGroup>
@@ -183,7 +192,7 @@ class CashierExportBill extends Component {
                     <Col sm={6} xs={6}>
                       <Button
                         bsStyle="danger"
-                        onClick={this.handleClickCancelPrintBill}
+                        onClick={this.handelClickAddCandidate}
                       >
                         Hủy
                       </Button>
@@ -194,7 +203,7 @@ class CashierExportBill extends Component {
                         bsStyle="primary"
                         onClick={this.handelClickPrintBill}
                       >
-                        <Glyphicon glyph="print" /> Xuất hóa đơn
+                        <Glyphicon glyph="plus" /> Thêm ứng viên
                       </Button>
                     </Col>
                   </Row>
@@ -202,6 +211,29 @@ class CashierExportBill extends Component {
               </Panel>
             </Col>
           ) : null}
+          <div className="checkIDBox">
+            <h4 className="text-center text-success">
+              Thêm ứng viên {this.state.candidateName} thành công
+            </h4>
+            <ReactToPrint
+              trigger={() => (
+                <p className="text-center">
+                  <Button bsStyle="primary">
+                    <Glyphicon glyph="print" /> Xuất hóa đơn
+                  </Button>
+                </p>
+              )}
+              content={() => this.componentRef}
+            />
+            <div className="">
+              <ExportBill ref={el => (this.componentRef = el)} />
+            </div>
+          </div>
+          <div className="checkIDBox text-center">
+            <Button bsStyle="danger">
+              <Glyphicon glyph="arrow-left" /> Quay lại
+            </Button>
+          </div>
         </Col>
       </div>
     );

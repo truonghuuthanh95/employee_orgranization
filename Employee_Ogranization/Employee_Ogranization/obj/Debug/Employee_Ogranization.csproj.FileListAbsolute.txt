@@ -135,3 +135,5 @@ C:\Users\thanhthse61493\Desktop\ASP.NET MVC\Employee_Ogranization\Employee_Ogran
 C:\Users\thanhthse61493\Desktop\ASP.NET MVC\Employee_Ogranization\Employee_Ogranization\Employee_Ogranization\obj\Debug\Employee_Ogranization.dll
 C:\Users\thanhthse61493\Desktop\ASP.NET MVC\Employee_Ogranization\Employee_Ogranization\Employee_Ogranization\obj\Debug\Employee_Ogranization.pdb
 C:\Users\thanhthse61493\Desktop\ASP.NET MVC\Employee_Ogranization\Employee_Ogranization\Employee_Ogranization\obj\Debug\Employee_Ogranization.csprojResolveAssemblyReference.cache
+C:\Users\thanhthse61493\Desktop\ASP.NET MVC\Employee_Ogranization\Employee_Ogranization\Employee_Ogranization\bin\Microsoft.Owin.Cors.dll
+C:\Users\thanhthse61493\Desktop\ASP.NET MVC\Employee_Ogranization\Employee_Ogranization\Employee_Ogranization\bin\Microsoft.Owin.Cors.xml

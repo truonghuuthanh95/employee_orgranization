@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "moment": "^2.22.1",
+    "qs": "^6.5.2",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-table-next": "^0.1.8",
@@ -11,7 +12,8 @@
     "react-redux": "^5.0.7",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "react-to-print": "^1.0.16"
   },
   "scripts": {
     "start": "react-scripts start",
