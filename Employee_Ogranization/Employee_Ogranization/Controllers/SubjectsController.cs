@@ -9,110 +9,31 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Employee_Ogranization.Models.DAO;
+using Employee_Ogranization.Models.DTO;
+using Employee_Ogranization.Repositories.Implements;
+using Employee_Ogranization.Repositories.Interfaces;
 
 namespace Employee_Ogranization.Controllers
 {
+    [RoutePrefix("api/subject")]
     public class SubjectsController : ApiController
     {
-        private EmployeeManagementDB db = new EmployeeManagementDB();
+        ISubjectRepository subjectRepository;
 
-        // GET: api/Subjects
-        public IQueryable<Subject> GetSubjects()
+        public SubjectsController(ISubjectRepository subjectRepository)
         {
-            return db.Subjects;
+            this.subjectRepository = subjectRepository;
         }
-
-        // GET: api/Subjects/5
-        [ResponseType(typeof(Subject))]
-        public IHttpActionResult GetSubject(int id)
+        [Route("getAllSubject")]
+        [HttpGet]
+        public ResponseResult GetAllSubject()
         {
-            Subject subject = db.Subjects.Find(id);
-            if (subject == null)
+            List<Subject> subjects = subjectRepository.GetSubjects();
+            if (subjects == null)
             {
-                return NotFound();
+                return new ResponseResult(404, "not found", null);
             }
-
-            return Ok(subject);
-        }
-
-        // PUT: api/Subjects/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutSubject(int id, Subject subject)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != subject.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(subject).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SubjectExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Subjects
-        [ResponseType(typeof(Subject))]
-        public IHttpActionResult PostSubject(Subject subject)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Subjects.Add(subject);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = subject.Id }, subject);
-        }
-
-        // DELETE: api/Subjects/5
-        [ResponseType(typeof(Subject))]
-        public IHttpActionResult DeleteSubject(int id)
-        {
-            Subject subject = db.Subjects.Find(id);
-            if (subject == null)
-            {
-                return NotFound();
-            }
-
-            db.Subjects.Remove(subject);
-            db.SaveChanges();
-
-            return Ok(subject);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool SubjectExists(int id)
-        {
-            return db.Subjects.Count(e => e.Id == id) > 0;
+            return new ResponseResult(200, "success", subjects);
         }
     }
 }

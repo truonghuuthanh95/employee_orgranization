@@ -45,7 +45,7 @@ namespace Employee_Ogranization.Provier
                         { "RoleName", account.Role.Name},
                         { "Name", account.Profile.FirstName},
                         { "ManagementUnitId", account.ManagementUnitId.ToString()},
-                        { "MananagementUnitName", account.ManagementUnit.name}
+                        { "MananagementUnitName", account.ManagementUnit.Name}
                     })));
                 }
                 else

@@ -15,6 +15,18 @@ namespace Employee_Ogranization.Models.DAO
 
         public int? ManagementUnitId { get; set; }
 
+        [StringLength(200)]
+        public string CollectContent { get; set; }
+
+        [StringLength(100)]
+        public string ValueByWord { get; set; }
+
+        [StringLength(200)]
+        public string Address { get; set; }
+
+        [Column(TypeName = "date")]
+        public DateTime? DateComeTo { get; set; }
+
         public virtual ManagementUnit ManagementUnit { get; set; }
     }
 }

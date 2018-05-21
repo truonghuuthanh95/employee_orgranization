@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Employee_Ogranization.Models.DAO;
@@ -26,7 +30,7 @@ namespace Employee_Ogranization.Controllers
 
         [Route("isValidToRegistrationInterview/{identifyCard}")]
         [HttpGet]
-        public ResponseCheckValidIdentifyCard IsValidToRegistrationInterview(string identifyCard)
+        public ResponseResult IsValidToRegistrationInterview(string identifyCard)
         {
             List<RegistrationInterview> registrationInterviews = registrationInterviewRepository.GetRegistrationInterviewByIdentidfyCard(identifyCard);
             if (registrationInterviews.Any())
@@ -36,17 +40,17 @@ namespace Employee_Ogranization.Controllers
                     int year = item.CreatedAt.Value.Year;                   
                     if (item.IsPass == true)
                     {
-                        return new ResponseCheckValidIdentifyCard(3, "invalid");
+                        return new ResponseResult(403, "Ứng viên này đã đậu ở kì thi tuyển năm " + item.CreatedAt.Value.Year + ", và đã được phân đơn vị công tác", null);
                     }
                     else if (year == DateTime.Now.Year)
                     {
 
-                        return new ResponseCheckValidIdentifyCard(2, item.Id.ToString());
+                        return new ResponseResult(403, "Ứng viên này đã đăng kí trước đó. Mã đăng kí là " + item.Id.ToString(), null);
                     }
                 }
             }
             
-                return new ResponseCheckValidIdentifyCard(1, "valid");
+                return new ResponseResult(200, "valid", null);
 
         }
 
@@ -59,62 +63,15 @@ namespace Employee_Ogranization.Controllers
 
             if (registrationInterview == null)
             {
-                return new ResponseResult(404, "not found", null);
+                return new ResponseResult(403, "Không tìm thấy ứng viên. Vui lòng kiểm tra lại số CMND hoặc mã hồ sơ", null);
             }
             else if (registrationInterview.CreatedAt.Value.Year != DateTime.Now.Year)
             {
-                return new ResponseResult(403, "Out of date update", null);
+                return new ResponseResult(403, "Hết hạn để sửa thông tin ứng tuyển", null);
             }
             return new ResponseResult(200, "success", registrationInterview);
         }
-        // GET: api/RegistrationInterviews/5
-        //[ResponseType(typeof(RegistrationInterview))]
-        //public IHttpActionResult GetRegistrationInterview(int id)
-        //{
-        //    RegistrationInterview registrationInterview = db.RegistrationInterviews.Find(id);
-        //    if (registrationInterview == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(registrationInterview);
-        //}
-
-        // PUT: api/RegistrationInterviews/5
-        //[ResponseType(typeof(void))]
-        //public IHttpActionResult PutRegistrationInterview(int id, RegistrationInterview registrationInterview)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (id != registrationInterview.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    db.Entry(registrationInterview).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        db.SaveChanges();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!RegistrationInterviewExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
-
+        
         //POST: api/RegistrationInterviews
         [Route("create")]
         [HttpPost]
@@ -127,10 +84,40 @@ namespace Employee_Ogranization.Controllers
             }
 
             RegistrationInterview registrationInterview  = registrationInterviewRepository.CreateRegistrationInterview(registrationInterviewRegister);
-
             return new ResponseResult(201, "created", registrationInterview);
             
         }
+        [Route("update")]
+        [HttpPost]
+        public ResponseResult UpdateRegistrationInterview(RegistrationInterviewDTO registrationInterviewDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ResponseResult(403, ModelState.Values.SelectMany(s => s.Errors).Select(s => s.ErrorMessage).ToString(), null);
+            }
+            RegistrationInterview registrationInterview = registrationInterviewRepository.UpdateRegistrationInterview(registrationInterviewDTO);
+            if (registrationInterview == null)
+            {
+                return new ResponseResult(403, "Something went wrong when update", null);
+            }
+            return new ResponseResult(200, "success", registrationInterview);
 
+        }
+        [Route("exportPDFRegistrationInterview/{id}")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> ExportPDFRegistrationInterview(int id)
+        {
+            string fileName = string.Concat("test.pdf");
+            string filePath = HttpContext.Current.Server.MapPath("~/Service/" + fileName);
+            //await ExportPDF.GeneratePDF(filePath);
+
+            HttpResponseMessage result = null;
+            result = Request.CreateResponse(HttpStatusCode.OK);
+            result.Content = new StreamContent(new FileStream(filePath, FileMode.Open));
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = fileName;
+
+            return result;
+        }
     }
 }

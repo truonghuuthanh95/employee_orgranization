@@ -17,12 +17,21 @@ namespace Employee_Ogranization.Models.DAO
             RegistrationInterviews = new HashSet<RegistrationInterview>();
         }
 
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [StringLength(50)]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         public bool? IsActive { get; set; }
+
+        [StringLength(50)]
+        public string Code { get; set; }
+
+        [StringLength(200)]
+        public string Address { get; set; }
+
+        [StringLength(200)]
+        public string FullName { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Account> Accounts { get; set; }

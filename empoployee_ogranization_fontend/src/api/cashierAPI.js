@@ -2,7 +2,8 @@ import {
   BASE_URL,
   GET_REGISTRATION_PRICE_BY_MANAGEMENTUNIT_ID,
   CHECK_IDENTIFY_CARD,
-  CREATE_REGISTRATION_INTERVIEW
+  CREATE_REGISTRATION_INTERVIEW,
+  GET_MANAGEMENT_UNIT_BY_ID
 } from "./baseURL";
 
 export function getRegistrationPriceByMananagementUnitId(id) {
@@ -22,6 +23,7 @@ export function createRegistrationInterview(
   price,
   candidateName,
   managementUnitId,
+  accountId
 ) {
   return fetch(`${BASE_URL + CREATE_REGISTRATION_INTERVIEW}`, {
     method: "POST",
@@ -32,7 +34,14 @@ export function createRegistrationInterview(
       IdentifyCard: identifyCard,
       RegistrationPrice: price,
       CandidateName: candidateName,
-      ManagementUnitId: managementUnitId
+      ManagementUnitId: managementUnitId,
+      CreatedBy: accountId
     })
   }).then(res => res.json());
+}
+
+export function getManagementUnitById(id) {
+  return fetch(`${BASE_URL + GET_MANAGEMENT_UNIT_BY_ID}/${id}`).then(res =>
+    res.json()
+  );
 }

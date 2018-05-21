@@ -85,9 +85,9 @@
 .select-program {
   padding: 20px 0 25px 0;
 }
-
 .login-backgound {
-  background-color: #f2f2f2;
+  background-color: #928f8f;
+  height: 900px;
 }
 .logo-login {
   /* padding-left: 125px; */
@@ -121,6 +121,7 @@
 }
 .bill-print {
   padding: 40px;
+  font-family: 'Times New Roman', Times, serif;
 }
 .warning-box{
     padding-top: 70px;

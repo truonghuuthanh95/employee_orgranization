@@ -64,14 +64,40 @@ namespace Employee_Ogranization.Models.DAO
 
         public int? HouseHoldId { get; set; }
 
-        [StringLength(50)]
-        public string GraduatedAtSubject { get; set; }
+        public int? GraduatedAtSubject { get; set; }
 
         public int? SchoolDegreeIdExpectedTeach { get; set; }
 
         public int? Price { get; set; }
 
+        public int? SpecializedTranningId { get; set; }
+
+        public bool? IsNienChe { get; set; }
+
+        public double? GPA { get; set; }
+
+        public double? CaptionProjectPoint { get; set; }
+
+        public int? TrainningCatergoryId { get; set; }
+
+        public int? HighestLevelEducationId { get; set; }
+
+        public int? ReviewedBy { get; set; }
+
+        public int? UniversityLocation { get; set; }
+
+        [StringLength(200)]
+        public string UniversityName { get; set; }
+
+        public int? GraduationClassficationId { get; set; }
+
+        public bool? IsHadNghiepVuSupham { get; set; }
+
+        public int? StatusWorkingInEducationId { get; set; }
+
         public virtual Account Account { get; set; }
+
+        public virtual Account Account1 { get; set; }
 
         public virtual CurrentLivingAddress CurrentLivingAddress { get; set; }
 
@@ -85,16 +111,30 @@ namespace Employee_Ogranization.Models.DAO
 
         public virtual ForeignLanguageCertification ForeignLanguageCertification { get; set; }
 
+        public virtual GraduationClassfication GraduationClassfication { get; set; }
+
+        public virtual HighestLevelEducation HighestLevelEducation { get; set; }
+
         public virtual HouseHold HouseHold { get; set; }
 
         public virtual InfomationTechnologyDegree InfomationTechnologyDegree { get; set; }
 
         public virtual ManagementUnit ManagementUnit { get; set; }
 
+        public virtual Province Province { get; set; }
+
         public virtual ReligionCategory ReligionCategory { get; set; }
 
         public virtual SchoolDegree SchoolDegree { get; set; }
 
+        public virtual SpecializedTraining SpecializedTraining { get; set; }
+
+        public virtual StatusWorikingInEducation StatusWorikingInEducation { get; set; }
+
         public virtual Subject Subject { get; set; }
+
+        public virtual Subject Subject1 { get; set; }
+
+        public virtual TrainningCategory TrainningCategory { get; set; }
     }
 }

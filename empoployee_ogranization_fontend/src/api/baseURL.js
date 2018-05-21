@@ -4,5 +4,17 @@ export const GET_REGISTRATION_PRICE_BY_MANAGEMENTUNIT_ID = 'price/getRegistratio
 export const CHECK_IDENTIFY_CARD = 'registrationInterview/IsValidToRegistrationInterview';
 export const CREATE_REGISTRATION_INTERVIEW = 'registrationInterview/create';
 export const CHECK_ID_AND_IDENTIFY_CARD = 'registrationInterview/isValidToUpdateRegistrationInterview';
-
-
+export const GET_MANAGEMENT_UNIT_BY_ID = 'managementUnit/getManagementUnitById';
+export const GET_PROVINCE_BY_COUNTRY_ID = 'province/getProvinceByContryId';
+export const GET_DISTRICT_BY_PROVINCE_ID = 'district/getDistrictByPronviceId';
+export const GET_WARD_BY_DISTRICT_ID = 'ward/getWardByDistrictId';
+export const GET_ALL_HIGHTEST_EDUCATION = 'highestLevelEducation/getAllHighestLevelEducation';
+export const GET_ALL_SUBJECT = 'subject/getAllSubject';
+export const GET_ALL_DEGREE_CLASSFICATION = 'degreeClassfication/getAllDegreeClassfication';
+export const GET_ALL_TRAINNING_CATERGORY = 'trainningCatergory/getAllTrainningCatergory';
+export const GET_ALL_SPECIALIZEZ_TRAINING = 'specializedTraining/getAllSpecializedTraining';
+export const GET_ALL_INFOMATION_TECHNOLOGY = 'informationTechnology/getAllInfomationTechnology';
+export const GET_ALL_GRADUATIONCLASSFICATION = 'graduationClassfication/GetAllGraduationClassfication';
+export const GET_ALL_FOREIGN_LANGUAGE_SPECTIFICATION = 'foreignLanguageCertification/getAllForeignLanguageCertification';
+export const GET_ALL_STATUS_WORKING_ON_EDUCATION = 'statusWorikingInEducation/getAllStatusWorikingInEducation';
+export const GET_SCHOOL_DEGREE = 'schoolDegree/getSchoolDegreeForManagementUnit';

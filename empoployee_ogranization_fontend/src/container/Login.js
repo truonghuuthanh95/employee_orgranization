@@ -7,7 +7,8 @@ import {
   Col,
   Panel,
   Button,
-  Image
+  Image,
+  HelpBlock
 } from "react-bootstrap";
 import { requestLogin } from "../api/guestAPI";
 class Login extends Component {
@@ -16,7 +17,9 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
-      message: ""
+      message: "",
+      errorUsername: undefined,
+      errorPassword: undefined,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClickLogin = this.handleClickLogin.bind(this);
@@ -29,22 +32,56 @@ class Login extends Component {
       [name]: value
     });
   }
+  async _validUsernamePassword() {
+    const { username, password } = this.state;
+    if (username === "" || password === "") {
+      if (username === "") {
+        this.setState({ errorUsername: "Vui lòng nhập tên đăng nhập" });
+      }
+      else{
+        this.setState({errorUsername: undefined})
+      }
+      if (password === "") {
+        this.setState({ errorPassword: "Vui lòng nhập mật khẩu" });
+      }
+      else { 
+        this.setState({errorPassword: undefined})
+      }
+      return false;
+    }
+    this.setState({
+      errorPassword: undefined,
+      errorUsername: undefined,
+    });
+
+    return true;
+  }
   async handleClickLogin(event) {
     event.preventDefault();
-    await requestLogin(this.state.username, this.state.password).then(res => {
-      if (res.error !== undefined) {
-        debugger;
-        this.setState({ message: res.error_description });
-      } else {
-        sessionStorage.setItem("user", JSON.stringify(res));
-        // debugger
-        this.props.history.push("/");
+    const { errorPassword, errorUsername, error } = this.state;
+    await this._validUsernamePassword().then(async result => {
+      if (result === true) {
+        await requestLogin(this.state.username, this.state.password).then(
+          res => {
+            if (res.error !== undefined) {
+              this.setState({ message: res.error_description });
+            } else {
+              sessionStorage.setItem("user", JSON.stringify(res));
+              debugger
+              if (res.RoleName === 'cashier') {
+                this.props.history.push("/xuathoadondangki");
+              }    
+              // this.props.history.push('/')         
+            }
+          }
+        );
       }
     });
   }
   render() {
     return (
       <div>
+        <Col sm={12} className="login-backgound">
         <Col sm={4} mdOffset={4} className="login-box">
           <Panel>
             <form onSubmit={this.handleClickLogin}>
@@ -56,7 +93,11 @@ class Login extends Component {
                   />
                 </div>
 
-                <FormGroup>
+                <FormGroup
+                  validationState={
+                    this.state.errorUsername !== undefined ? "error" : null
+                  }
+                >
                   <InputGroup>
                     <InputGroup.Addon>
                       <Glyphicon glyph="user" />
@@ -67,10 +108,17 @@ class Login extends Component {
                       name="username"
                       value={this.state.username}
                       onChange={this.handleInputChange}
+                      bsSize="large"
                     />
                   </InputGroup>
+                  <FormControl.Feedback />
+                  <HelpBlock bsStyle>{this.state.errorUsername}</HelpBlock>
                 </FormGroup>
-                <FormGroup>
+                <FormGroup
+                  validationState={
+                    this.state.errorPassword !== undefined ? "error" : null
+                  }
+                >
                   <InputGroup>
                     <InputGroup.Addon>
                       <Glyphicon glyph="lock" />
@@ -81,18 +129,22 @@ class Login extends Component {
                       name="password"
                       value={this.state.password}
                       onChange={this.handleInputChange}
+                      bsSize="large"
                     />
                   </InputGroup>
+                  <FormControl.Feedback />
+                  <HelpBlock bsStyle>{this.state.errorPassword}</HelpBlock>
                 </FormGroup>
                 <p className="text-center text-danger">{this.state.message}</p>
               </Panel.Body>
               <Panel.Footer>
-                <Button bsStyle="primary" type="submit" block>
-                  Đăng Nhập
+                <Button bsStyle="success" bsSize="large" type="submit" block>
+                  ĐĂNG NHẬP
                 </Button>
               </Panel.Footer>
             </form>
           </Panel>
+        </Col>
         </Col>
       </div>
     );

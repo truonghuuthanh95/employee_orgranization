@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {
   getRegistrationPriceByMananagementUnitId,
   checkIdentifyCard,
-  createRegistrationInterview
+  createRegistrationInterview,
+  getManagementUnitById
 } from "../api/cashierAPI";
 import ExportBill from "../component/ExportBill";
 import ReactToPrint from "react-to-print";
@@ -32,19 +33,37 @@ class CashierExportBill extends Component {
       priceSelected: "",
       registrationId: "",
       isDisableIdentifyCardInput: false,
-      errorCreateRegistrationInterview: ""
+      errorCreateRegistrationInterview: "",
+      managementUnit: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmitCheckIndentifyCard = this.handleSubmitCheckIndentifyCard.bind(
       this
     );
     this.handelClickPrintBill = this.handelClickPrintBill.bind(this);
-    this.handelClickAddCandidate = this.handelClickAddCandidate.bind(this);
-  }
-  async componentDidMount() {
-    await getRegistrationPriceByMananagementUnitId(1).then(res =>
-      this.setState({ registrationPrice: res })
+    this.handelClickCancelAddCandidate = this.handelClickCancelAddCandidate.bind(
+      this
     );
+  }
+  
+  async componentDidMount() {
+    const account = JSON.parse(sessionStorage.getItem("user"));
+    if (account === null) {
+      this.props.history.push("/login");
+    } else if (account.RoleName !== 'admin' && account.RoleName !== 'cashier') {
+      sessionStorage.removeItem('user');
+      this.props.history.push("/login");
+    }else {
+      await getRegistrationPriceByMananagementUnitId(1).then(res =>
+        this.setState({ registrationPrice: res })
+      );
+      await getManagementUnitById(account.ManagementUnitId).then(res => {
+        if (res.Status === 200) {
+          this.setState({ managementUnit: res.Results });
+        }
+      });
+    }
+   
   }
 
   handleInputChange(event) {
@@ -69,23 +88,15 @@ class CashierExportBill extends Component {
         errorIdentifyCard: ""
       });
       await checkIdentifyCard(this.state.identifyCard).then(res => {
-        if (res.Status === 1) {
+        if (res.Status === 200) {
           this.setState({
             isvalidIdentifyCard: true,
             isDisableIdentifyCardInput: true
           });
-        } else if (res.Status === 3) {
+        } else if (res.Status === 403) {
           this.setState({
             isvalidIdentifyCard: false,
-            errorIdentifyCard:
-              "Thí sinh này đã đậu ở kì tuyển trước đó, và đã được phân đơn vị công tác"
-          });
-        } else if (res.Status === 2) {
-          this.setState({
-            isvalidIdentifyCard: false,
-            errorIdentifyCard: `Thí sinh này đã đăng kí trước đó. Mã đăng kí là ${
-              res.Message
-            }`
+            errorIdentifyCard: res.Message
           });
         }
       });
@@ -94,11 +105,13 @@ class CashierExportBill extends Component {
   handelClickPrintBill(event) {
     event.preventDefault();
   }
-  handelClickAddCandidate(event) {
+  handelClickCancelAddCandidate(event) {
     event.preventDefault();
     this.setState({
       isDisableIdentifyCardInput: false,
-      isvalidIdentifyCard: false
+      isvalidIdentifyCard: false,
+      errorCandidateName: "",
+      registrationId: ""
     });
   }
   async handelClickPrintBill(event) {
@@ -111,16 +124,17 @@ class CashierExportBill extends Component {
       const { identifyCard, registrationPrice, candidateName } = this.state;
       await createRegistrationInterview(
         identifyCard,
-        registrationPrice,
+        registrationPrice.Value,
         candidateName,
-        account.ManagementUnitId
+        account.ManagementUnitId,
+        account.AccountId
       ).then(res => {
-        if (res.status === 201) {
+        if (res.Status === 201) {
           this.setState({ registrationId: res.Results.Id });
         } else if (res.Status === 409) {
           this.setState({
             errorCreateRegistrationInterview:
-              "Thí sinh này đã tồn tại trong hệ thống"
+              "Ứng viên này đã tồn tại trong hệ thống"
           });
         }
       });
@@ -131,109 +145,127 @@ class CashierExportBill extends Component {
       <div>
         <Header />
         <Col sm={8} smOffset={2}>
-          <div className="text-center checkIDBox">
-            <Form inline onSubmit={this.handleSubmitCheckIndentifyCard}>
-              <p className="text-warning">
-                Vui lòng nhập số chứng minh nhân dân sau đó nhấn xác nhận để hệ
-                thống kiểm tra
-              </p>
-              <p className="text-danger">{this.state.errorIdentifyCard}</p>
-              <FormGroup controlId="formInlineEmail">
-                <ControlLabel>Số CMND</ControlLabel>{" "}
-                <FormControl
-                  type="number"
-                  placeholder="CMND"
-                  name="identifyCard"
-                  value={this.state.identifyCard}
-                  onChange={this.handleInputChange}
-                  disabled={this.state.isDisableIdentifyCardInput}
-                />
-              </FormGroup>{" "}
-              <Button type="submit" bsStyle="success">
-                Xác nhận
-              </Button>
-            </Form>
-          </div>{" "}
-          {this.state.isvalidIdentifyCard ? (
-            <Col sm={8} smOffset={2} className="exportBillBox">
-              <Panel>
-                <Panel.Body>
-                  <form>
-                    <FormGroup
-                      controlId="formBasicText"
-                      validationState={
-                        this.state.errorCandidateName !== "" ? "error" : null
-                      }
-                    >
-                      <ControlLabel>Họ tên người đăng kí</ControlLabel>
-                      <FormControl
-                        type="text"
-                        value={this.state.candidateName}
-                        placeholder="Họ tên người đăng kí"
-                        onChange={this.handleInputChange}
-                        name="candidateName"
-                      />
-                      <FormControl.Feedback />
-                      <HelpBlock>{this.state.errorCandidateName}</HelpBlock>
-                    </FormGroup>
-                    <FormGroup>
-                      <ControlLabel>Lệ phí</ControlLabel>
-                      <FormControl.Static>
-                        <b>
-                          <i>{this.state.registrationPrice.Value} VND </i>{" "}
-                        </b>{" "}
-                      </FormControl.Static>
-                    </FormGroup>
-                  </form>
-                </Panel.Body>
-
-                <Panel.Footer>
-                  <Row>
-                    <Col sm={6} xs={6}>
-                      <Button
-                        bsStyle="danger"
-                        onClick={this.handelClickAddCandidate}
-                      >
-                        Hủy
-                      </Button>
-                    </Col>
-                    <Col sm={6} xs={6}>
-                      <Button
-                        block
-                        bsStyle="primary"
-                        onClick={this.handelClickPrintBill}
-                      >
-                        <Glyphicon glyph="plus" /> Thêm ứng viên
-                      </Button>
-                    </Col>
-                  </Row>
-                </Panel.Footer>
-              </Panel>
-            </Col>
-          ) : null}
-          <div className="checkIDBox">
-            <h4 className="text-center text-success">
-              Thêm ứng viên {this.state.candidateName} thành công
-            </h4>
-            <ReactToPrint
-              trigger={() => (
-                <p className="text-center">
-                  <Button bsStyle="primary">
-                    <Glyphicon glyph="print" /> Xuất hóa đơn
+          {this.state.registrationId === "" ? (
+            <div>
+             
+              <div className="text-center checkIDBox">
+              <h3 className="text-center text-info">XUẤT HÓA ĐƠN ĐĂNG KÍ</h3>
+                <Form inline onSubmit={this.handleSubmitCheckIndentifyCard}>
+                  <p className="text-warning">
+                    Vui lòng nhập số chứng minh nhân dân sau đó nhấn xác nhận để
+                    hệ thống kiểm tra
+                  </p>
+                  <p className="text-danger">{this.state.errorIdentifyCard}</p>
+                  <FormGroup controlId="formInlineEmail">
+                    <ControlLabel>Số CMND</ControlLabel>{" "}
+                    <FormControl
+                      type="number"
+                      placeholder="CMND"
+                      name="identifyCard"
+                      value={this.state.identifyCard}
+                      onChange={this.handleInputChange}
+                      disabled={this.state.isDisableIdentifyCardInput}
+                    />
+                  </FormGroup>{" "}
+                  <Button type="submit" bsStyle="success">
+                    XÁC NHẬN
                   </Button>
-                </p>
-              )}
-              content={() => this.componentRef}
-            />
-            <div className="">
-              <ExportBill ref={el => (this.componentRef = el)} />
+                </Form>
+              </div>{" "}
+              {this.state.isvalidIdentifyCard ? (
+                <Col sm={8} smOffset={2} className="exportBillBox">
+                  <Panel>
+                    <Panel.Body>
+                      <form>
+                        <FormGroup
+                          controlId="formBasicText"
+                          validationState={
+                            this.state.errorCandidateName !== ""
+                              ? "error"
+                              : null
+                          }
+                        >
+                          <ControlLabel>Họ tên người đăng kí</ControlLabel>
+                          <FormControl
+                            type="text"
+                            value={this.state.candidateName}
+                            placeholder="Họ tên người đăng kí"
+                            onChange={this.handleInputChange}
+                            name="candidateName"
+                          />
+                          <FormControl.Feedback />
+                          <HelpBlock>{this.state.errorCandidateName}</HelpBlock>
+                        </FormGroup>
+                        <FormGroup>
+                          <ControlLabel>Lệ phí</ControlLabel>
+                          <FormControl.Static>
+                            <b>
+                              <i>{this.state.registrationPrice.Value} VND </i>{" "}
+                            </b>{" "}
+                          </FormControl.Static>
+                        </FormGroup>
+                      </form>
+                    </Panel.Body>
+
+                    <Panel.Footer>
+                      <Row>
+                        <Col sm={6} xs={6}>
+                          <Button
+                            bsStyle="danger"
+                            onClick={this.handelClickCancelAddCandidate}
+                          >
+                            HỦY
+                          </Button>
+                        </Col>
+                        <Col sm={6} xs={6}>
+                          <Button
+                            block
+                            bsStyle="primary"
+                            onClick={this.handelClickPrintBill}
+                          >
+                            <Glyphicon glyph="plus" /> THÊM ỨNG VIÊN
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Panel.Footer>
+                  </Panel>
+                </Col>
+              ) : null}
             </div>
-          </div>
-          <div className="checkIDBox text-center">
-            <Button bsStyle="danger">
-              <Glyphicon glyph="arrow-left" /> Quay lại
-            </Button>
-          </div>
+          ) : (
+            <div>
+              <div className="checkIDBox">
+                <h4 className="text-center text-success">
+                  Thêm ứng viên <b>{this.state.candidateName}</b> thành công với
+                  mã hồ sơ là <b>{this.state.registrationId}</b>
+                </h4>
+                <ReactToPrint
+                  trigger={() => (
+                    <p className="text-center">
+                      <Button bsStyle="primary">
+                        <Glyphicon glyph="print" /> XUẤT HÓA ĐƠN
+                      </Button>
+                    </p>
+                  )}
+                  content={() => this.componentRef}
+                />
+                <div className="hidden">
+                  <ExportBill
+                    ref={el => (this.componentRef = el)}
+                    dataToprint={this.state}
+                  />
+                </div>
+              </div>
+              <div className="checkIDBox text-center">
+                <Button
+                  bsStyle="danger"
+                  onClick={this.handelClickCancelAddCandidate}
+                >
+                  <Glyphicon glyph="arrow-left" /> QUAY LẠI
+                </Button>
+              </div>
+            </div>
+          )}
         </Col>
       </div>
     );

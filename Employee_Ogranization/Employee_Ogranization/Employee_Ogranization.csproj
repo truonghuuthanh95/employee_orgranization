@@ -247,11 +247,24 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\DegreeClassificationsController.cs" />
+    <Compile Include="Controllers\ForeignLanguageCertificationsController.cs" />
+    <Compile Include="Controllers\GraduationClassficationsController.cs" />
+    <Compile Include="Controllers\HighestLevelEducationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InformationTechnologiesController.cs" />
+    <Compile Include="Controllers\ManagementUnitsController.cs" />
+    <Compile Include="Controllers\DistrictsController.cs" />
+    <Compile Include="Controllers\ProvincesController.cs" />
     <Compile Include="Controllers\RegistrationInterviewsController.cs" />
     <Compile Include="Controllers\RegistrationPricesController.cs" />
+    <Compile Include="Controllers\SchoolDegreesController.cs" />
+    <Compile Include="Controllers\SpecializedTrainingsController.cs" />
+    <Compile Include="Controllers\StatusWorikingInEducationsController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
+    <Compile Include="Controllers\TrainningCategoriesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\WardsController.cs" />
     <Compile Include="Extentions\OwinContextExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -261,10 +274,10 @@
     <Compile Include="Models\DAO\CurrentLivingAddress.cs" />
     <Compile Include="Models\DAO\DegreeClassification.cs" />
     <Compile Include="Models\DAO\District.cs" />
-    <Compile Include="Models\DAO\EducationCategory.cs" />
     <Compile Include="Models\DAO\EmployeeManagementDB.cs" />
     <Compile Include="Models\DAO\ForeignLanguageCertification.cs" />
-    <Compile Include="Models\DAO\GraduationCategory.cs" />
+    <Compile Include="Models\DAO\GraduationClassfication.cs" />
+    <Compile Include="Models\DAO\HighestLevelEducation.cs" />
     <Compile Include="Models\DAO\HouseHold.cs" />
     <Compile Include="Models\DAO\InfomationTechnologyDegree.cs" />
     <Compile Include="Models\DAO\ManagementUnit.cs" />
@@ -277,17 +290,37 @@
     <Compile Include="Models\DAO\SalaryDegree.cs" />
     <Compile Include="Models\DAO\School.cs" />
     <Compile Include="Models\DAO\SchoolDegree.cs" />
+    <Compile Include="Models\DAO\SpecializedTraining.cs" />
+    <Compile Include="Models\DAO\StatusWorikingInEducation.cs" />
     <Compile Include="Models\DAO\Subject.cs" />
     <Compile Include="Models\DAO\TrainningCategory.cs" />
     <Compile Include="Models\DAO\Ward.cs" />
+    <Compile Include="Models\DTO\RegistrationInterviewDTO.cs" />
     <Compile Include="Models\DTO\RegistrationInterviewRegister.cs" />
     <Compile Include="Models\DTO\ResponseCheckValidIdentifyCard.cs" />
     <Compile Include="Models\DTO\ResponseResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provier\OAuthAppProvider.cs" />
     <Compile Include="Repositories\Implements\AccountRepository.cs" />
+    <Compile Include="Repositories\Implements\DegreeClassificationRepository.cs" />
+    <Compile Include="Repositories\Implements\DistrictRepository.cs" />
+    <Compile Include="Repositories\Implements\ForeignLanguageRepository.cs" />
+    <Compile Include="Repositories\Implements\GraduationClassficationRepository.cs" />
+    <Compile Include="Repositories\Implements\HighestLevelEducationRepository.cs" />
+    <Compile Include="Repositories\Implements\InformationTechnologyDegreeRepository.cs" />
+    <Compile Include="Repositories\Implements\ManagementUnitRepository.cs" />
+    <Compile Include="Repositories\Implements\ProvinceRepository.cs" />
     <Compile Include="Repositories\Implements\RegistrationInterviewRepository.cs" />
     <Compile Include="Repositories\Implements\RegistrationPriceRepository.cs" />
+    <Compile Include="Repositories\Implements\SchoolDegreeRepository.cs" />
+    <Compile Include="Repositories\Implements\SpecializedTrainingRepository.cs" />
+    <Compile Include="Repositories\Implements\StatusWorikingInEducationRepository.cs" />
+    <Compile Include="Repositories\Implements\SubjectRepository.cs" />
+    <Compile Include="Repositories\Implements\TrainningCategoryRepository.cs" />
+    <Compile Include="Repositories\Implements\WardRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IGraduationCategoryRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IGraduationClassficationRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IHighestLevelEducationRepository.cs" />
     <Compile Include="Repositories\Interfaces\IAccountRepository.cs" />
     <Compile Include="Repositories\Interfaces\ICurrentLivingAddressRepository.cs" />
     <Compile Include="Repositories\Interfaces\IDegreeClassificationRepository.cs" />
@@ -295,6 +328,7 @@
     <Compile Include="Repositories\Interfaces\IForeignLanguageRepository.cs" />
     <Compile Include="Repositories\Interfaces\IHouseHoldRepository.cs" />
     <Compile Include="Repositories\Interfaces\IInformationTechnologyDegree.cs" />
+    <Compile Include="Repositories\Interfaces\IManagementUnitRepository.cs" />
     <Compile Include="Repositories\Interfaces\IProfileRepository.cs" />
     <Compile Include="Repositories\Interfaces\IProvinceRepository.cs" />
     <Compile Include="Repositories\Interfaces\IRegistrationInterviewRepository.cs" />
@@ -302,7 +336,10 @@
     <Compile Include="Repositories\Interfaces\IReligionCatergoryRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISchoolDegreeRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISchoolRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ISpecializedTrainingRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IStatusWorikingInEducationRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISubjectRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ITrainningCategoryRepository.cs" />
     <Compile Include="Repositories\Interfaces\IWardRepository.cs" />
     <Compile Include="Service\User.cs" />
     <Compile Include="Service\UserService.cs" />
@@ -362,6 +399,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ManagementUnits\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

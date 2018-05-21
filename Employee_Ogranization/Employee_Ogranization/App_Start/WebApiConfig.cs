@@ -19,7 +19,20 @@ namespace Employee_Ogranization
             var container = new UnityContainer();
             container.RegisterType<IRegistrationPriceRepository, RegistrationPriceRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IRegistrationInterviewRepository, RegistrationInterviewRepository>(new HierarchicalLifetimeManager());
-
+            container.RegisterType<IManagementUnitRepository, ManagementUnitRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDistrictRepository, DistrictRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IProvinceRepository, ProvinceRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IWardRepository, WardRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<ISubjectRepository, SubjectRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDegreeClassificationRepository, DegreeClassificationRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<ISpecializedTrainingRepository, SpecializedTrainingRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<ITrainningCategoryRepository, TrainningCategoryRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IForeignLanguageRepository, ForeignLanguageRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IInformationTechnologyDegree, InformationTechnologyDegreeRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IHighestLevelEducationRepository, HighestLevelEducationRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IGraduationClassficationRepository, GraduationClassficationRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IStatusWorikingInEducationRepository, StatusWorikingInEducationRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<ISchoolDegreeRepository, SchoolDegreeRepository>(new HierarchicalLifetimeManager());
             config.DependencyResolver = new UnityResolver(container);
             
             

@@ -13,6 +13,7 @@ namespace Employee_Ogranization.Models.DAO
         public Subject()
         {
             RegistrationInterviews = new HashSet<RegistrationInterview>();
+            RegistrationInterviews1 = new HashSet<RegistrationInterview>();
         }
 
         public int Id { get; set; }
@@ -27,5 +28,8 @@ namespace Employee_Ogranization.Models.DAO
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegistrationInterview> RegistrationInterviews { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegistrationInterview> RegistrationInterviews1 { get; set; }
     }
 }
