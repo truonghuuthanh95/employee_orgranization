@@ -391,8 +391,6 @@ class RegistrationInterview extends Component {
   }
   async _validatePersonalInformation() {
     const {
-      CandidateLastName,
-      CandidateFirstName,
       Email,
       PhoneNumber
     } = this.state.registrationInterview;
@@ -477,7 +475,6 @@ class RegistrationInterview extends Component {
   async _validateEducation() {
     const {
       UniversityName,
-      IsHadNghiepVuSupham,
       GraduationClassficationId,
       GPA,
       CaptionProjectPoint,
