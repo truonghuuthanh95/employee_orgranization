@@ -12,7 +12,10 @@ namespace Employee_Ogranization.Models.DAO
         public int Id { get; set; }
 
         [StringLength(50)]
-        public string CandidateName { get; set; }
+        public string CandidateFirstName { get; set; }
+
+        [StringLength(10)]
+        public string CandidateLastName { get; set; }
 
         public DateTime? DateInterview { get; set; }
 
@@ -41,7 +44,7 @@ namespace Employee_Ogranization.Models.DAO
 
         public bool? IsPass { get; set; }
 
-        [StringLength(50)]
+        [StringLength(100)]
         public string Email { get; set; }
 
         public int? SubjectToInterviewId { get; set; }
@@ -63,8 +66,6 @@ namespace Employee_Ogranization.Models.DAO
         public int? CurrentLivingAddressId { get; set; }
 
         public int? HouseHoldId { get; set; }
-
-        public int? GraduatedAtSubject { get; set; }
 
         public int? SchoolDegreeIdExpectedTeach { get; set; }
 
@@ -94,6 +95,18 @@ namespace Employee_Ogranization.Models.DAO
         public bool? IsHadNghiepVuSupham { get; set; }
 
         public int? StatusWorkingInEducationId { get; set; }
+
+        [StringLength(50)]
+        public string NamVaoNghanh { get; set; }
+
+        [StringLength(50)]
+        public string MaNgach { get; set; }
+
+        [StringLength(50)]
+        public string HeSoLuong { get; set; }
+
+        [StringLength(50)]
+        public string MocNangLuongLansau { get; set; }
 
         public virtual Account Account { get; set; }
 
@@ -132,8 +145,6 @@ namespace Employee_Ogranization.Models.DAO
         public virtual StatusWorikingInEducation StatusWorikingInEducation { get; set; }
 
         public virtual Subject Subject { get; set; }
-
-        public virtual Subject Subject1 { get; set; }
 
         public virtual TrainningCategory TrainningCategory { get; set; }
     }

@@ -1,4 +1,5 @@
 export const BASE_URL = 'http://localhost:54412/api/';
+// export const BASE_URL = 'http://192.168.1.137:54412/api/';
 export const LOG_IN = 'http://localhost:54412/token';
 export const GET_REGISTRATION_PRICE_BY_MANAGEMENTUNIT_ID = 'price/getRegistrationPriceByManagemenentUnitId';
 export const CHECK_IDENTIFY_CARD = 'registrationInterview/IsValidToRegistrationInterview';
@@ -18,3 +19,4 @@ export const GET_ALL_GRADUATIONCLASSFICATION = 'graduationClassfication/GetAllGr
 export const GET_ALL_FOREIGN_LANGUAGE_SPECTIFICATION = 'foreignLanguageCertification/getAllForeignLanguageCertification';
 export const GET_ALL_STATUS_WORKING_ON_EDUCATION = 'statusWorikingInEducation/getAllStatusWorikingInEducation';
 export const GET_SCHOOL_DEGREE = 'schoolDegree/getSchoolDegreeForManagementUnit';
+export const UPDATE_REGISTRATION_INTERVIEW = 'registrationInterview/update';

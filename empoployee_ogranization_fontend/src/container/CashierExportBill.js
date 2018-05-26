@@ -102,9 +102,6 @@ class CashierExportBill extends Component {
       });
     }
   }
-  handelClickPrintBill(event) {
-    event.preventDefault();
-  }
   handelClickCancelAddCandidate(event) {
     event.preventDefault();
     this.setState({

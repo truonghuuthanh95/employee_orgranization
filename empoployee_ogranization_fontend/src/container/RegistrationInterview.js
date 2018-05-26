@@ -12,10 +12,8 @@ import {
   Glyphicon,
   Row,
   HelpBlock,
-  Radio,
   Checkbox
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import {
   checkIsValidToUpdateRegistrationInterview,
@@ -31,8 +29,11 @@ import {
   getAllGraduationClassfication,
   getAllForeignLanguageClassfication,
   getAllStatusWorkingInEducation,
-  getSchoolDegree
+  getSchoolDegree,
+  updateRegistrationInterview
 } from "../api/candidateAPI";
+import ExportRegistrationInterview from '../component/ExportRegistrationInterview';
+import ReactToPrint from "react-to-print";
 class RegistrationInterview extends Component {
   constructor(props) {
     super(props);
@@ -65,12 +66,19 @@ class RegistrationInterview extends Component {
       foreignLanguageList: [],
       workingInEducationList: [],
       schoolDegreeList: [],
-      errorCandidateName: "",
-      errorHouseNumberCurrentLiving: "",
-      errorHouseNumberHousehold: "",
-      errorEmail: "",
-      errorPhoneNumber: "",
-      showFormInput: 1
+      errorCandidateName: undefined,
+      errorCandidateFirstName: undefined,
+      errorHouseNumberCurrentLiving: undefined,
+      errorHouseNumberHousehold: undefined,
+      errorEmail: undefined,
+      errorPhoneNumber: undefined,
+      errorUniversityName: undefined,
+      errorNgghiepVuSuPham: undefined,
+      errorAVG: undefined,
+      errorIsAgree: undefined,
+      errorCaptionProjectPoint: undefined,
+      showFormInput: 1,
+      isAgree: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChangeIdentifyCard = this.handleChangeIdentifyCard.bind(this);
@@ -91,6 +99,10 @@ class RegistrationInterview extends Component {
     );
     this.handleCheckeducation = this.handleCheckeducation.bind(this);
     this.handleBack = this.handleBack.bind(this);
+    this.handleAgree = this.handleAgree.bind(this);
+    this.handleSubmitUpdateInfomationRegistrationInterview = this.handleSubmitUpdateInfomationRegistrationInterview.bind(
+      this
+    );
   }
   componentWillMount() {
     //init year of birth to select
@@ -140,7 +152,7 @@ class RegistrationInterview extends Component {
       }
     });
   }
-  handleInputChangeCurrentLivingAddressRegistrationInterview(event) {
+  async handleInputChangeCurrentLivingAddressRegistrationInterview(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
@@ -149,6 +161,22 @@ class RegistrationInterview extends Component {
         currentLivingAddress: {
           ...this.state.currentLivingAddress,
           ["HouseNumber"]: value
+        }
+      });
+    } else if (name === "DistrictID") {
+      await getWardByDistrictId(value).then(res => {
+        if (res.Status === 200) {
+          this.setState({
+            currentLivingAddressWardList: res.Results,
+            currentLivingAddress: {
+              ...this.state.currentLivingAddress,
+              Ward: {
+                ...this.state.currentLivingAddress.Ward,
+                Id: res.Results[0].Id,
+                DistrictID: value
+              }
+            }
+          });
         }
       });
     } else {
@@ -163,7 +191,7 @@ class RegistrationInterview extends Component {
       });
     }
   }
-  handleInputChangeHouseHoldRegistrationInterview(event) {
+  async handleInputChangeHouseHoldRegistrationInterview(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
@@ -175,19 +203,67 @@ class RegistrationInterview extends Component {
         }
       });
     } else if (name === "ProvinceId") {
-      this.setState({
-        houseHold: {
-          ...this.state.houseHold,
-          Ward: {
-            ...this.state.houseHold.Ward,
-            District: {
-              ...this.state.houseHold.Ward.District,
-              Province: {
-                ...this.state.houseHold.Ward.District.Province,
-                ["Id"]: value
+      //sau khi user click chon thanh pho, he thong se load lai cac quan thuoc thanh pho do
+      await getDistrictByProvinceId(value).then(async res => {
+        //set lai tp da chon
+        this.setState({
+          houseHold: {
+            ...this.state.houseHold,
+            Ward: {
+              ...this.state.houseHold.Ward,
+              District: {
+                ...this.state.houseHold.Ward.District,
+                Province: {
+                  ...this.state.houseHold.Ward.District.Province,
+                  ["Id"]: value
+                }
               }
             }
           }
+        });
+        if (res.Status === 200) {
+          //sau khi load thanh cong, he thong se set lai quan/huyen da chon la quan/huyen [0] theo list tra ve
+          this.setState({
+            houseHoldDistrictList: res.Results,
+            houseHold: {
+              ...this.state.houseHold,
+              Ward: {
+                ...this.state.houseHold.Ward,
+                DistrictID: res.Results[0].Id
+              }
+            }
+          });
+          //load cac phuong/xa theo defaual quan/huyen[0], sau do set lai ward la [0]
+          await getWardByDistrictId(res.Results[0].Id).then(res => {
+            if (res.Status === 200) {
+              this.setState({
+                houseHoldWardList: res.Results,
+                houseHold: {
+                  ...this.state.houseHold,
+                  Ward: {
+                    ...this.state.houseHold.Ward,
+                    Id: res.Results[0].Id
+                  }
+                }
+              });
+            }
+          });
+        }
+      });
+    } else if (name === "DistrictID") {
+      await getWardByDistrictId(value).then(res => {
+        if (res.Status === 200) {
+          this.setState({
+            houseHoldWardList: res.Results,
+            houseHold: {
+              ...this.state.houseHold,
+              Ward: {
+                ...this.state.houseHold.Ward,
+                Id: res.Results[0].Id,
+                DistrictID: value
+              }
+            }
+          });
         }
       });
     } else {
@@ -220,8 +296,8 @@ class RegistrationInterview extends Component {
             registrationInterview: res.Results,
             currentLivingAddress: res.Results.CurrentLivingAddress,
             houseHold: res.Results.HouseHold,
-            dayOfBirthSelected: moment(res.Results.DOB).day(),
-            monthOfBirthSelected: moment(res.Results.DOB).month(),
+            dayOfBirthSelected: moment(res.Results.DOB).date(),
+            monthOfBirthSelected: moment(res.Results.DOB).month() + 1,
             yearOfBirthSelected: moment(res.Results.DOB).year()
           });
           //get province for select household with defaule 237 is Vietnamese
@@ -293,12 +369,6 @@ class RegistrationInterview extends Component {
               this.setState({ workingInEducationList: res.Results });
             }
           });
-          await getAllSubject().then(res => {
-            if (res.Status === 200) {
-              this.setState({ subjectList: res.Results });
-            }
-          });
-
           await getSchoolDegree().then(res => {
             if (res.Status === 200) {
               this.setState({ schoolDegreeList: res.Results });
@@ -309,7 +379,7 @@ class RegistrationInterview extends Component {
             isValidIdentifyCard: false,
             errorIdentifyCard: res.Message
           });
-        } 
+        }
       });
     }
   }
@@ -319,75 +389,249 @@ class RegistrationInterview extends Component {
   handleSubmitRegistrationInterview(event) {
     event.preventDefault();
   }
+  async _validatePersonalInformation() {
+    const {
+      CandidateLastName,
+      CandidateFirstName,
+      Email,
+      PhoneNumber
+    } = this.state.registrationInterview;
+    const { currentLivingAddress, houseHold } = this.state;
+
+    if (
+      currentLivingAddress.HouseNumber === null ||
+      houseHold.HouseNumber === null ||
+      Email === null ||
+      PhoneNumber === null ||
+      currentLivingAddress.HouseNumber === "" ||
+      houseHold.HouseNumber === "" ||
+      Email === "" ||
+      PhoneNumber === ""
+    ) {
+      // if (CandidateFirstName === null || CandidateFirstName === "") {
+      //   this.setState({ errorCandidateFirstName: "Vui lòng điền tên" });
+      // } else {
+      //   this.setState({ errorCandidateFirstName: undefined });
+      // }
+      // if (CandidateLastName === null || CandidateLastName === "") {
+      //   this.setState({
+      //     errorCandidateName: "Vui lòng điền đầy đủ họ và tên lót"
+      //   });
+      // } else {
+      //   this.setState({
+      //     errorCandidateName: undefined
+      //   });
+      // }
+      if (
+        currentLivingAddress.HouseNumber === null ||
+        currentLivingAddress.HouseNumber === ""
+      ) {
+        this.setState({
+          errorHouseNumberCurrentLiving: "Vui lòng điền số nhà"
+        });
+      } else {
+        this.setState({
+          errorHouseNumberCurrentLiving: undefined
+        });
+      }
+      if (houseHold.HouseNumber === null || houseHold.HouseNumber === "") {
+        this.setState({
+          errorHouseNumberHousehold: "Vui lòng điền số nhà"
+        });
+      } else {
+        this.setState({
+          errorHouseNumberHousehold: undefined
+        });
+      }
+      if (Email === null || Email === "") {
+        this.setState({ errorEmail: "Vui lòng điền địa chỉ email" });
+      } else {
+        this.setState({ errorEmail: undefined });
+      }
+      if (PhoneNumber === null || PhoneNumber === "") {
+        this.setState({ errorPhoneNumber: "Vui lòng nhập số điện thoại" });
+      } else {
+        this.setState({ errorPhoneNumber: undefined });
+      }
+      return false;
+    }
+
+    this.setState({
+      errorEmail: undefined,
+      errorHouseNumberCurrentLiving: undefined,
+      errorHouseNumberHousehold: undefined,
+      errorPhoneNumber: undefined,
+      errorCandidateFirstName: undefined
+    });
+    return true;
+  }
   //check valid person infomation
   async handleCheckPersonInformation(event) {
     event.preventDefault();
+    await this._validatePersonalInformation().then(result => {
+      if (result === true) {
+        this.setState({ showFormInput: 2 });
+      }
+    });
+  }
+  async _validateEducation() {
     const {
-      registrationInterview,
-      errorCandidateName,
-      errorEmail,
-      errorHouseNumberCurrentLiving,
-      errorHouseNumberHousehold,
-      errorPhoneNumber,
-      houseHold,
-      currentLivingAddress
-    } = this.state;
-
-    if (registrationInterview.CandidateName === "") {
-      await this.setState({
-        errorCandidateName: "Vui lòng điền đầy đủ họ và tên"
-      });
-    } else {
-      await this.setState({ errorCandidateName: "" });
-    }
-    if (currentLivingAddress.HouseNumber === "") {
-      await this.setState({
-        errorHouseNumberCurrentLiving: "Vui lòng điền số nhà"
-      });
-    } else {
-      await this.setState({ errorHouseNumberCurrentLiving: "" });
-    }
-    if (houseHold.HouseNumber === "") {
-      await this.setState({
-        errorHouseNumberHousehold: "Vui lòng điền số nhà"
-      });
-    } else {
-      await this.setState({ errorHouseNumberHousehold: "" });
-    }
-    if (registrationInterview.PhoneNumber === "") {
-      this.setState({ errorPhoneNumber: "Vui lòng nhập số điện thoại" });
-    } else {
-      this.setState({ errorPhoneNumber: "" });
-    }
-    if (registrationInterview.Email === "") {
-      this.setState({ errorEmail: "Vui lòng điền email" });
-    } else {
-      this.setState({ errorEmail: "" });
-    }
+      UniversityName,
+      IsHadNghiepVuSupham,
+      GraduationClassficationId,
+      GPA,
+      CaptionProjectPoint,
+      IsNienChe
+    } = this.state.registrationInterview;
     if (
-      errorCandidateName === "" &&
-      errorEmail === "" &&
-      errorHouseNumberCurrentLiving === "" &&
-      errorHouseNumberHousehold === "" &&
-      errorPhoneNumber === ""
+      UniversityName === null ||
+      UniversityName === "" ||
+      GPA === null ||
+      GPA === "" ||
+      (CaptionProjectPoint === null && IsNienChe === "true") ||
+      (CaptionProjectPoint === "" && IsNienChe === "true")
     ) {
-      await this.setState({ showFormInput: 2 });
+      if (UniversityName === null || UniversityName === "") {
+        this.setState({
+          errorUniversityName: "Vui lòng điền tên trường đào tạo"
+        });
+      } else {
+        this.setState({ errorUniversityName: undefined });
+      }
+
+      if (
+        (CaptionProjectPoint === null && IsNienChe === "true") ||
+        (CaptionProjectPoint === "" && IsNienChe === "true")
+      ) {
+        this.setState({
+          errorCaptionProjectPoint: "Vui lòng nhập điểm luận văn"
+        });
+      } else {
+        this.setState({ errorCaptionProjectPoint: undefined });
+      }
+      if (GPA === null || GPA === "") {
+        this.setState({ errorAVG: "Vui lòng nhập điểm trung bình" });
+      } else {
+        this.setState({ errorAVG: undefined });
+      }
+      return false;
+    }
+    this.setState({
+      errorNgghiepVuSuPham: undefined,
+      errorUniversityName: undefined,
+      errorAVG: undefined,
+      errorCaptionProjectPoint: undefined
+    });
+    return true;
+  }
+  async handleCheckeducation(event) {
+    event.preventDefault();
+    await this._validateEducation().then(result => {
+      if (result === true) {
+        this.setState({ showFormInput: 3 });
+      }
+    });
+  }
+  async _validateCheckExpectation() {
+    const { isAgree, subjectList } = this.state;
+    const {
+      IsHadNghiepVuSupham,
+      GraduationClassficationId,
+      SubjectToInterviewId
+    } = this.state.registrationInterview;
+    const positionInterview = subjectList.find(
+      subject => subject.Id == SubjectToInterviewId
+    );
+
+    if (
+      isAgree !== true ||
+      (IsHadNghiepVuSupham === "false" &&
+        GraduationClassficationId === "2" &&
+        positionInterview.PositionInterview.Id == "2") ||
+      (IsHadNghiepVuSupham === "false" &&
+        GraduationClassficationId === "4" &&
+        positionInterview.PositionInterview.Id == "2") ||
+      (IsHadNghiepVuSupham === "false" &&
+        GraduationClassficationId === "6" &&
+        positionInterview.PositionInterview.Id == "2")
+    ) {
+      if (
+        (IsHadNghiepVuSupham === "false" &&
+          GraduationClassficationId === "2" &&
+          positionInterview.PositionInterview.Id == "2") ||
+        (IsHadNghiepVuSupham === "false" &&
+          GraduationClassficationId === "4" &&
+          positionInterview.PositionInterview.Id == "2") ||
+        (IsHadNghiepVuSupham === "false" &&
+          GraduationClassficationId === "6" &&
+          positionInterview.PositionInterview.Id == "2")
+      ) {
+        this.setState({
+          errorNgghiepVuSuPham:
+            "Hiện tại bằng tốt nghiệp của bạn không phải tốt nghiệp ngành sư phạm. Vì vậy yêu cầu cần phải có chứng chỉ bồi dưỡng sư phạm"
+        });
+      } else {
+        this.setState({ errorNgghiepVuSuPham: undefined });
+      }
+      if (isAgree !== true) {
+        this.setState({
+          errorIsAgree:
+            "Vui lòng tích vào nếu như thông tin bạn khai là đúng sự thật"
+        });
+      } else {
+        this.setState({ errorIsAgree: undefined });
+      }
+      return false;
+    } else {
+      this.setState({
+        errorIsAgree: undefined,
+        errorNgghiepVuSuPham: undefined
+      });
+      return true;
     }
   }
-  handleCheckeducation(event) {
+  async handleSubmitUpdateInfomationRegistrationInterview(event) {
+    const {
+      isAgree,
+      registrationInterview,
+      yearOfBirthSelected,
+      monthOfBirthSelected,
+      dayOfBirthSelected,
+      currentLivingAddress,
+      houseHold,
+      subjectList
+    } = this.state;
     event.preventDefault();
-    this.setState({ showFormInput: 3 });
+    await this._validateCheckExpectation().then(async result => {
+      if (result === true) {
+        await updateRegistrationInterview(
+          registrationInterview,
+          `${yearOfBirthSelected}/${monthOfBirthSelected}/${dayOfBirthSelected}`,
+          currentLivingAddress,
+          houseHold
+        ).then(res => {
+          if (res.Status === 200) {
+            this.setState({ showFormInput: 4, registrationInterview: res.Results });
+          }
+        });
+      }
+    });
+  }
+  handleAgree(event) {
+    event.preventDefault();
+    this.setState(prevous => ({ isAgree: !prevous.isAgree }));
   }
   handleBack(event) {
     event.preventDefault();
     this.setState(prevous => ({ showFormInput: prevous.showFormInput - 1 }));
   }
   render() {
-    console.log(
-      this.state.registrationInterview.GraduationClassficationId == "2" ||
-        this.state.registrationInterview.GraduationClassficationId == "4" ||
-        this.state.registrationInterview.GraduationClassficationId === "5"
+    const { subjectList } = this.state;
+    const { SubjectToInterviewId } = this.state.registrationInterview;
+    const positionInterview = subjectList.find(
+      subject => subject.Id == SubjectToInterviewId
     );
+    console.log(moment().date());
     return (
       <div>
         <Header />
@@ -396,6 +640,9 @@ class RegistrationInterview extends Component {
           {!this.state.isValidIdentifyCard ? (
             <div className="text-center checkIDBox">
               <Form inline onSubmit={this.handleSubmitCheckIndentifyCard}>
+                <h3 className="text-center text-info">
+                  CẬP NHẬT HỒ SƠ ỨNG TUYỂN
+                </h3>
                 <p className="text-warning">
                   Vui lòng nhập mã hồ sơ đăng kí trong biên lai và nhập số chứng
                   minh nhân dân sau đó nhấn xác nhận để hệ thống kiểm tra
@@ -422,11 +669,11 @@ class RegistrationInterview extends Component {
                   />
                 </FormGroup>{" "}
                 <Button type="submit" bsStyle="success">
-                  Xác nhận
+                  XÁC NHẬN
                 </Button>
               </Form>
             </div>
-          ) : (
+          ) : this.state.showFormInput !== 4 ? (
             <Panel>
               <Panel.Heading>
                 <Panel.Title componentClass="h3">
@@ -441,25 +688,16 @@ class RegistrationInterview extends Component {
                 {this.state.showFormInput === 1 ? (
                   <form>
                     <Row>
-                      <Col sm={8}>
-                        <FormGroup controlId="formControlsSelect">
-                          <ControlLabel>
-                            1.Họ và tên{" "}
-                            <Label bsClass="text-danger">
-                              <Glyphicon glyph="star" />
-                            </Label>
-                          </ControlLabel>
-                          <FormControl
-                            type="text"
-                            placeholder="Họ và tên"
-                            name="CandidateName"
-                            value={
-                              this.state.registrationInterview.CandidateName
-                            }
-                            onChange={
-                              this.handleInputChangeRegistrationInterview
-                            }
-                          />
+                      <Col sm={4}>
+                        <FormGroup>
+                          <ControlLabel>1.Họ và tên</ControlLabel>
+                          <FormControl.Static>
+                            {this.state.registrationInterview
+                              .CandidateLastName +
+                              " " +
+                              this.state.registrationInterview
+                                .CandidateFirstName}
+                          </FormControl.Static>
                         </FormGroup>
                       </Col>
                       <Col sm={4}>
@@ -600,7 +838,15 @@ class RegistrationInterview extends Component {
                           </FormGroup>
                         </Col>
                         <Col sm={5}>
-                          <FormGroup controlId="formControlsSelect">
+                          <FormGroup
+                            controlId="formControlsSelect"
+                            validationState={
+                              this.state.errorHouseNumberCurrentLiving !==
+                              undefined
+                                ? "error"
+                                : null
+                            }
+                          >
                             <ControlLabel>
                               Số nhà{" "}
                               <Label bsClass="text-danger">
@@ -619,6 +865,10 @@ class RegistrationInterview extends Component {
                                   .handleInputChangeCurrentLivingAddressRegistrationInterview
                               }
                             />
+                            <FormControl.Feedback />
+                            <HelpBlock>
+                              {this.state.errorHouseNumberCurrentLiving}
+                            </HelpBlock>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -708,7 +958,14 @@ class RegistrationInterview extends Component {
                           </FormGroup>
                         </Col>
                         <Col sm={5}>
-                          <FormGroup controlId="formControlsSelect">
+                          <FormGroup
+                            controlId="formControlsSelect"
+                            validationState={
+                              this.state.errorHouseNumberHousehold !== undefined
+                                ? "error"
+                                : null
+                            }
+                          >
                             <ControlLabel>
                               Số nhà/Thôn{" "}
                               <Label bsClass="text-danger">
@@ -725,13 +982,22 @@ class RegistrationInterview extends Component {
                                   .handleInputChangeHouseHoldRegistrationInterview
                               }
                             />
+                            <FormControl.Feedback />
+                            <HelpBlock>
+                              {this.state.errorHouseNumberHousehold}
+                            </HelpBlock>
                           </FormGroup>
                         </Col>
                       </Row>
                     </Col>
                     <Row>
                       <Col sm={8}>
-                        <FormGroup controlId="formControlsSelect">
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorEmail !== undefined ? "error" : null
+                          }
+                        >
                           <ControlLabel>7.Địa chỉ email </ControlLabel>
                           <FormControl
                             type="text"
@@ -742,10 +1008,19 @@ class RegistrationInterview extends Component {
                               this.handleInputChangeRegistrationInterview
                             }
                           />
+                          <FormControl.Feedback />
+                          <HelpBlock>{this.state.errorEmail}</HelpBlock>
                         </FormGroup>
                       </Col>
                       <Col sm={4}>
-                        <FormGroup controlId="formControlsSelect">
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorPhoneNumber !== undefined
+                              ? "error"
+                              : null
+                          }
+                        >
                           <ControlLabel>8.Số điện thoại </ControlLabel>
                           <FormControl
                             type="text"
@@ -756,6 +1031,8 @@ class RegistrationInterview extends Component {
                               this.handleInputChangeRegistrationInterview
                             }
                           />
+                          <FormControl.Feedback />
+                          <HelpBlock>{this.state.errorPhoneNumber}</HelpBlock>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -764,7 +1041,14 @@ class RegistrationInterview extends Component {
                   <form>
                     <Row>
                       <Col sm={8}>
-                        <FormGroup controlId="formControlsSelect">
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorUniversityName !== undefined
+                              ? "error"
+                              : null
+                          }
+                        >
                           <ControlLabel>9.Tên trường đào tạo </ControlLabel>
                           <FormControl
                             type="text"
@@ -778,9 +1062,12 @@ class RegistrationInterview extends Component {
                             }
                           />
                           <FormControl.Feedback />
-                          <HelpBlock>
+                          <HelpBlock bsClass="text-warning">
                             Ghi đầy đủ tên trường (ví dụ: Trường đại học Bách
                             Khoa Tp.HCM)
+                          </HelpBlock>
+                          <HelpBlock>
+                            {this.state.errorUniversityName}
                           </HelpBlock>
                         </FormGroup>
                       </Col>
@@ -812,7 +1099,9 @@ class RegistrationInterview extends Component {
                               : null}
                           </FormControl>
                           <FormControl.Feedback />
-                          <HelpBlock>Vị trí trường đại học</HelpBlock>
+                          <HelpBlock bsClass="text-warning">
+                            Vị trí trường đại học
+                          </HelpBlock>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -924,7 +1213,12 @@ class RegistrationInterview extends Component {
                         </FormGroup>
                       </Col>
                       <Col sm={4}>
-                        <FormGroup controlId="formControlsSelect">
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorAVG !== undefined ? "error" : null
+                          }
+                        >
                           <ControlLabel>15.Điểm tốt nghiệp </ControlLabel>
                           <Col>
                             <FormControl
@@ -937,12 +1231,22 @@ class RegistrationInterview extends Component {
                             />
                           </Col>
                           <FormControl.Feedback />
-                          <HelpBlock>Lưu ý ghi điểm đại học</HelpBlock>
+                          <HelpBlock bsClass="text-warning">
+                            Lưu ý ghi điểm đại học
+                          </HelpBlock>
+                          <HelpBlock>{this.state.errorAVG}</HelpBlock>
                         </FormGroup>
                       </Col>
                       {this.state.registrationInterview.IsNienChe === "true" ? (
                         <Col sm={4}>
-                          <FormGroup controlId="formControlsSelect">
+                          <FormGroup
+                            controlId="formControlsSelect"
+                            validationState={
+                              this.state.errorCaptionProjectPoint !== undefined
+                                ? "error"
+                                : null
+                            }
+                          >
                             <ControlLabel>15.1.Điểm luận văn TN</ControlLabel>
                             <Col>
                               <FormControl
@@ -958,7 +1262,12 @@ class RegistrationInterview extends Component {
                               />
                             </Col>
                             <FormControl.Feedback />
-                            <HelpBlock>Lưu ý ghi điểm đại học</HelpBlock>
+                            <HelpBlock bsClass="text-warning">
+                              Lưu ý ghi điểm đại học
+                            </HelpBlock>
+                            <HelpBlock>
+                              {this.state.errorCaptionProjectPoint}
+                            </HelpBlock>
                           </FormGroup>
                         </Col>
                       ) : null}
@@ -1047,41 +1356,10 @@ class RegistrationInterview extends Component {
                       </Col>
                     </Row>
                     <Row>
-                      {this.state.registrationInterview
-                        .GraduationClassficationId == "2" ||
-                      this.state.registrationInterview
-                        .GraduationClassficationId == "4" ||
-                      this.state.registrationInterview
-                        .GraduationClassficationId === "6" ? (
-                        <Col sm={6}>
-                          <FormGroup>
-                            <ControlLabel>
-                              Đã có chứng chỉ bồi dưỡng nghiệp vụ sư phạm
-                            </ControlLabel>
-                            <FormControl
-                              componentClass="select"
-                              value={this.state.registrationInterview.IsMale}
-                              onChange={
-                                this.handleInputChangeRegistrationInterview
-                              }
-                              name="IsMale"
-                            >
-                              <option value="true">Đã có</option>
-                              <option value="false">Chưa có</option>
-                            </FormControl>
-                            <FormControl.Feedback />
-                            <HelpBlock>
-                              Hiện tại bằng tốt nghiệp của bạn không phải tốt
-                              nghiệp ngành sư phạm, vì vậy yêu cầu cần phải có
-                              chứng chỉ bồi dưỡng sư phạm
-                            </HelpBlock>
-                          </FormGroup>
-                        </Col>
-                      ) : null}
                       <Col sm={6}>
                         <FormGroup>
                           <ControlLabel>
-                            Công tác trong ngành giáo dục
+                           19.Công tác trong ngành giáo dục
                           </ControlLabel>
 
                           <FormControl
@@ -1111,7 +1389,7 @@ class RegistrationInterview extends Component {
                     <Row>
                       <Col sm={5}>
                         <FormGroup controlId="formControlsSelect">
-                          <ControlLabel>Chứng chỉ tin hoc</ControlLabel>
+                          <ControlLabel>20.Chứng chỉ tin hoc</ControlLabel>
                           <FormControl
                             componentClass="select"
                             value={
@@ -1137,7 +1415,7 @@ class RegistrationInterview extends Component {
                       </Col>
                       <Col sm={5}>
                         <FormGroup controlId="formControlsSelect">
-                          <ControlLabel>Chứng chỉ ngoại ngữ</ControlLabel>
+                          <ControlLabel>21.Chứng chỉ ngoại ngữ</ControlLabel>
                           <FormControl
                             componentClass="select"
                             value={
@@ -1163,6 +1441,99 @@ class RegistrationInterview extends Component {
                   </form>
                 ) : this.state.showFormInput === 3 ? (
                   <form>
+                     <FormGroup>
+                        <ControlLabel>
+                          22.Thông tin lương (dành cho ứng viên có công tác và tham
+                          gia Bảo hiểm XH)
+                        </ControlLabel>
+                      </FormGroup>
+                    <Row>
+                     
+                      <Col sm={3}>
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorAVG !== undefined ? "error" : null
+                          }
+                        >
+                          <ControlLabel>Năm vào ngành </ControlLabel>
+                          <Col>
+                            <FormControl
+                              type="number"
+                              name="NamVaoNghanh"
+                              value={this.state.registrationInterview.NamVaoNghanh}
+                              onChange={
+                                this.handleInputChangeRegistrationInterview
+                              }
+                            />
+                          </Col>
+                        </FormGroup>
+                      </Col>
+                      <Col sm={3}>
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorAVG !== undefined ? "error" : null
+                          }
+                        >
+                          <ControlLabel>Mã ngạch </ControlLabel>
+                          <Col>
+                            <FormControl
+                              type="text"
+                              name="MaNgach"
+                              value={this.state.registrationInterview.MaNgach}
+                              onChange={
+                                this.handleInputChangeRegistrationInterview
+                              }
+                            />
+                          </Col>
+                          <FormControl.Feedback />
+                        </FormGroup>
+                      </Col>
+                      <Col sm={3}>
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorAVG !== undefined ? "error" : null
+                          }
+                        >
+                          <ControlLabel>Hệ số lương </ControlLabel>
+                          <Col>
+                            <FormControl
+                              type="text"
+                              name="HeSoLuong"
+                              value={this.state.registrationInterview.HeSoLuong}
+                              onChange={
+                                this.handleInputChangeRegistrationInterview
+                              }
+                            />
+                          </Col>
+                        </FormGroup>
+                      </Col>
+                      <Col sm={3}>
+                        <FormGroup
+                          controlId="formControlsSelect"
+                          validationState={
+                            this.state.errorAVG !== undefined ? "error" : null
+                          }
+                        >
+                          <ControlLabel>Mốc nâng lương lần sau </ControlLabel>
+                          <Col>
+                            <FormControl
+                              type="number"
+                              name="MocNangLuongLansau"
+                              value={
+                                this.state.registrationInterview
+                                  .MocNangLuongLansau
+                              }
+                              onChange={
+                                this.handleInputChangeRegistrationInterview
+                              }
+                            />
+                          </Col>
+                        </FormGroup>
+                      </Col>
+                    </Row>
                     <Row>
                       <Col sm={5}>
                         <FormGroup controlId="formControlsSelect">
@@ -1181,17 +1552,65 @@ class RegistrationInterview extends Component {
                             {this.state.subjectList.length > 0
                               ? this.state.subjectList.map(foreign => (
                                   <option value={foreign.Id} key={foreign.Id}>
-                                    {foreign.Name}
+                                    {foreign.PositionInterview.Name +
+                                      " " +
+                                      foreign.Name}
                                   </option>
                                 ))
                               : null}
                           </FormControl>
                         </FormGroup>
                       </Col>
+                      {(this.state.registrationInterview
+                        .GraduationClassficationId == "2" &&
+                        positionInterview.PositionInterview.Id == "2") ||
+                      (this.state.registrationInterview
+                        .GraduationClassficationId == "4" &&
+                        positionInterview.PositionInterview.Id == "2") ||
+                      (this.state.registrationInterview
+                        .GraduationClassficationId == "6" &&
+                        positionInterview.PositionInterview.Id == "2") ? (
+                        <Col sm={6}>
+                          <FormGroup
+                            validationState={
+                              this.state.errorNgghiepVuSuPham !== undefined
+                                ? "error"
+                                : null
+                            }
+                          >
+                            <ControlLabel>
+                              Đã có chứng chỉ bồi dưỡng nghiệp vụ sư phạm
+                            </ControlLabel>
+                            <FormControl
+                              componentClass="select"
+                              value={
+                                this.state.registrationInterview
+                                  .IsHadNghiepVuSupham
+                              }
+                              onChange={
+                                this.handleInputChangeRegistrationInterview
+                              }
+                              name="IsHadNghiepVuSupham"
+                            >
+                              <option value="true">Đã có</option>
+                              <option value="false">Chưa có</option>
+                            </FormControl>
+                            <FormControl.Feedback />
+                            <HelpBlock>
+                              {this.state.errorNgghiepVuSuPham}
+                            </HelpBlock>
+                          </FormGroup>
+                        </Col>
+                      ) : null}
                     </Row>
+
                     {this.state.registrationInterview
-                      .CreatedAtManagementUnitId === "26" ? (
+                      .CreatedAtManagementUnitId == "26" ? (
                       <Row>
+                        <p className="text-center">
+                          Chỉ dành cho ứng viên đăng ký dạy Trung học phổ thông
+                          hoặc TT giáo dục thường xuyên trực thuộc
+                        </p>
                         <Col sm={4}>
                           <FormGroup controlId="formControlsSelect">
                             <ControlLabel>Nguyện vọng 1</ControlLabel>
@@ -1285,30 +1704,46 @@ class RegistrationInterview extends Component {
                       </Row>
                     ) : (
                       <Row>
-                      <Col sm={5}>
-                      <FormGroup controlId="formControlsSelect">
-                        <ControlLabel>Cấp dự tuyển</ControlLabel>
-                        <FormControl
-                          componentClass="select"
-                          value={
-                            this.state.registrationInterview
-                              .SchoolDegreeIdExpectedTeach
-                          }
-                          onChange={this.handleInputChangeRegistrationInterview}
-                          name="SchoolDegreeIdExpectedTeach"
-                        >
-                          {this.state.schoolDegreeList.length > 0
-                            ? this.state.schoolDegreeList.map(foreign => (
-                                <option value={foreign.Id} key={foreign.Id}>
-                                  {foreign.Name}
-                                </option>
-                              ))
-                            : null}
-                        </FormControl>
-                      </FormGroup>
-                      </Col>
+                        <Col sm={5}>
+                          <FormGroup controlId="formControlsSelect">
+                            <ControlLabel>Cấp dự tuyển</ControlLabel>
+                            <FormControl
+                              componentClass="select"
+                              value={
+                                this.state.registrationInterview
+                                  .SchoolDegreeIdExpectedTeach
+                              }
+                              onChange={
+                                this.handleInputChangeRegistrationInterview
+                              }
+                              name="SchoolDegreeIdExpectedTeach"
+                            >
+                              {this.state.schoolDegreeList.length > 0
+                                ? this.state.schoolDegreeList.map(foreign => (
+                                    <option value={foreign.Id} key={foreign.Id}>
+                                      {foreign.Name}
+                                    </option>
+                                  ))
+                                : null}
+                            </FormControl>
+                          </FormGroup>
+                        </Col>
                       </Row>
                     )}
+                    <Checkbox
+                      checked={this.state.isAgree}
+                      onChange={this.handleInputChange}
+                      name="isAgree"
+                      readOnly
+                      validationState={
+                        this.state.errorIsAgree !== undefined ? "error" : null
+                      }
+                    >
+                      Tôi cam đoan những thông tin trên hoàn toàn đúng sự thật
+                      và chịu trách nhiệm về những thông tin đã đăng kí
+                      <FormControl.Feedback />
+                      <HelpBlock>{this.state.errorIsAgree}</HelpBlock>
+                    </Checkbox>
                   </form>
                 ) : null}
               </Panel.Body>
@@ -1349,7 +1784,9 @@ class RegistrationInterview extends Component {
                       <Button
                         block
                         bsStyle="success"
-                        onClick={this.handleCheckeducation}
+                        onClick={
+                          this.handleSubmitUpdateInfomationRegistrationInterview
+                        }
                       >
                         HOÀN TẤT
                       </Button>
@@ -1358,6 +1795,27 @@ class RegistrationInterview extends Component {
                 )}
               </Panel.Footer>
             </Panel>
+          ) : (
+            <div className="checkIDBox text-center">
+              <h3 className="text-success">CẬP NHẬT HỒ SƠ THÀNH CÔNG</h3>
+              <ReactToPrint
+                  trigger={() => (
+                    <p className="text-center">
+                      <Button bsStyle="primary">
+                        <Glyphicon glyph="print" /> IN HỒ SƠ
+                      </Button>
+                    </p>
+                  )}
+                  content={() => this.componentRef}
+                />
+                <div className="hidden">
+                  <ExportRegistrationInterview
+                    ref={el => (this.componentRef = el)}
+                    dataToprint={this.state}
+                  />
+                </div>
+              
+            </div>
           )}
         </Col>
       </div>

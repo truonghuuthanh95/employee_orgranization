@@ -65,7 +65,7 @@ class Header extends Component {
         <Navbar collapseOnSelect className="header-color">
           <Navbar.Header>
             <Navbar.Brand className="logo-style-padding-top">
-              <NavLink to="/index">
+              <NavLink to="/">
                 <Image
                   src={require("../resourse/image/logo_so.png")}
                   rounded
@@ -139,7 +139,29 @@ class Header extends Component {
                     SỞ GIÁO DỤC VÀ ĐÀO TẠO TP.HỒ CHÍ MINH
                   </Panel.Title>
                 </Panel.Heading>
-                <Panel.Body collapsible />
+                <Panel.Body collapsible>
+                <ul>
+                    <li>
+                      <b>Ông Lê Hông Quân</b>
+                      <div className="contact-info">
+                        <p>
+                          Chuyên viên phòng Tổ chức cán bộ - Sở GD-ĐT TP.HCM{" "}
+                        </p>
+                        <p>
+                          <Glyphicon glyph="envelope" />
+                          <a href="mailto:lehongquan220782@gmail.com">
+                            {" "}
+                            lehongquan220782@gmail.com
+                          </a>.
+                        </p>
+                        <p>
+                          <Glyphicon glyph="earphone" />
+                          <a href="tel:0965999879"> 0965 999 879</a>
+                        </p>
+                      </div>
+                    </li>
+                  </ul>
+                </Panel.Body>
               </Panel>
               <Panel eventKey="2">
                 <Panel.Heading>
@@ -148,27 +170,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  <ul>
-                    <li>
-                      <b>Ông Hồ Tấn Minh</b>
-                      <div className="contact-info">
-                        <p>
-                          Chuyên viên phòng Giáo dục Trung Học - Sở GD-ĐT TP.HCM{" "}
-                        </p>
-                        <p>
-                          <Glyphicon glyph="envelope" />
-                          <a href="mailto:htminh@hcm.edu.vn">
-                            {" "}
-                            htminh@hcm.edu.vn
-                          </a>.
-                        </p>
-                        <p>
-                          <Glyphicon glyph="earphone" />
-                          <a href="tel:0909881283"> 0909881283</a>
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
+                  Chưa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="3">
@@ -178,17 +180,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                 Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="4">
@@ -198,17 +190,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="5">
@@ -218,17 +200,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="6">
@@ -238,17 +210,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="7">
@@ -258,17 +220,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="8">
@@ -278,17 +230,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="9">
@@ -298,17 +240,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="10">
@@ -318,17 +250,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="11">
@@ -338,17 +260,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="12">
@@ -358,17 +270,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="13">
@@ -378,17 +280,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="14">
@@ -398,17 +290,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="15">
@@ -418,17 +300,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="16">
@@ -438,17 +310,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="17">
@@ -458,17 +320,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="18">
@@ -478,17 +330,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="19">
@@ -498,17 +340,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="20">
@@ -518,17 +350,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="21">
@@ -538,17 +360,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="22">
@@ -558,17 +370,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="23">
@@ -578,17 +380,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
               <Panel eventKey="24">
@@ -598,17 +390,7 @@ class Header extends Component {
                   </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body collapsible>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+                Chứa có
                 </Panel.Body>
               </Panel>
             </PanelGroup>

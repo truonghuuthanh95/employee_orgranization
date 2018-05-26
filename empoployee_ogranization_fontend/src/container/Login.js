@@ -58,7 +58,6 @@ class Login extends Component {
   }
   async handleClickLogin(event) {
     event.preventDefault();
-    const { errorPassword, errorUsername, error } = this.state;
     await this._validUsernamePassword().then(async result => {
       if (result === true) {
         await requestLogin(this.state.username, this.state.password).then(
@@ -70,8 +69,10 @@ class Login extends Component {
               debugger
               if (res.RoleName === 'cashier') {
                 this.props.history.push("/xuathoadondangki");
-              }    
-              // this.props.history.push('/')         
+              }   else {
+this.props.history.push('/')      
+              } 
+                 
             }
           }
         );
@@ -82,7 +83,7 @@ class Login extends Component {
     return (
       <div>
         <Col sm={12} className="login-backgound">
-        <Col sm={4} mdOffset={4} className="login-box">
+        <Col sm={4} smOffset={4} className="login-box">
           <Panel>
             <form onSubmit={this.handleClickLogin}>
               <Panel.Body>

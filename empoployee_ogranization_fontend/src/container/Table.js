@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import TableCaption from "../component/TableCaption";
-import { Col } from "react-bootstrap";
+import { Col, Button } from "react-bootstrap";
+import ExportRegistrationInterview from '../component/ExportRegistrationInterview';
 const CaptionElement = () => (
   <h3
     style={{
@@ -53,12 +54,16 @@ class Table extends Component {
         bgColor: "#00BFFF"
       }
     };
+    this.handleClickDownload = this.handleClickDownload.bind(this);
   }
-
+  handleClickDownload(event){
+    event.preventDefault();
+    window.open(`vnexpress.net`, '_blank')
+  }
   render() {
     return (
       <div>
-        <Col md={8} mdOffset={2}>
+        {/* <Col md={8} mdOffset={2}>
           <BootstrapTable
             keyField="id"
             data={this.state.product}
@@ -71,6 +76,10 @@ class Table extends Component {
             bordered={ false }
           />
         </Col>
+        <Button onClick={this.handleClickDownload}>
+          click me 
+        </Button> */}
+        <ExportRegistrationInterview/>
       </div>
     );
   }

@@ -11,17 +11,15 @@ namespace Employee_Ogranization.Models.DTO
         public int Id { get; set; }
 
         [StringLength(50)]
-        public string CandidateName { get; set; }
-
-        public TimeSpan? TimeInterview { get; set; }
-
-        [StringLength(15)]
-        public string IdentifyCard { get; set; }
-       
+        public string CandidateFirstName { get; set; }
+        [StringLength(50)]
+        public string CandidateLastName { get; set; }
         public DateTime? DOB { get; set; }
 
         [StringLength(12)]
-        public string PhoneNumber { get; set; }      
+        public string PhoneNumber { get; set; }
+
+        public int? CreatedAtManagementUnitId { get; set; }
 
         public int? Aspirations01DistrictId { get; set; }
 
@@ -40,22 +38,17 @@ namespace Employee_Ogranization.Models.DTO
 
         public int? InfomationTechnologyDegreeId { get; set; }
 
-        public int? ReligionId { get; set; }
-
         public bool? IsMale { get; set; }
 
         public int? DegreeClassificationId { get; set; }
 
         public short? GraduatedAtYear { get; set; }
 
-        public int? CreatedBy { get; set; }
-
         public int? CurrentLivingAddressId { get; set; }
-
+        public string CurrentLivingAddressHouseNumber { get; set; }
         public int? HouseHoldId { get; set; }
 
-       
-        public int GraduatedAtSubject { get; set; }
+        public string HouseHoldHouseNumber { get; set; }
 
         public int? SchoolDegreeIdExpectedTeach { get; set; }
 
@@ -72,6 +65,28 @@ namespace Employee_Ogranization.Models.DTO
         public int? TrainningCatergoryId { get; set; }
 
         public int? HighestLevelEducationId { get; set; }
+
         public int? ReviewedBy { get; set; }
+
+        public int? UniversityLocation { get; set; }
+
+        [StringLength(200)]
+        public string UniversityName { get; set; }
+
+        public int? GraduationClassficationId { get; set; }
+
+        public bool? IsHadNghiepVuSupham { get; set; }
+
+        public int? StatusWorkingInEducationId { get; set; }
+        public string NamVaoNghanh { get; set; } = "Không có";
+
+        [StringLength(50)]
+        public string MaNgach { get; set; } = "Không có";
+
+        [StringLength(50)]
+        public string HeSoLuong { get; set; } = "Không có";
+
+        [StringLength(50)]
+        public string MocNangLuongLansau { get; set; } = "Không có";
     }
 }

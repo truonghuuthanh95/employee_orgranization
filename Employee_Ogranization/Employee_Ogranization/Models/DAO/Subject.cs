@@ -13,7 +13,6 @@ namespace Employee_Ogranization.Models.DAO
         public Subject()
         {
             RegistrationInterviews = new HashSet<RegistrationInterview>();
-            RegistrationInterviews1 = new HashSet<RegistrationInterview>();
         }
 
         public int Id { get; set; }
@@ -26,10 +25,11 @@ namespace Employee_Ogranization.Models.DAO
 
         public bool? IsActive { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RegistrationInterview> RegistrationInterviews { get; set; }
+        public int? PositionInterviewId { get; set; }
+
+        public virtual PositionInterview PositionInterview { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RegistrationInterview> RegistrationInterviews1 { get; set; }
+        public virtual ICollection<RegistrationInterview> RegistrationInterviews { get; set; }
     }
 }

@@ -29,7 +29,16 @@ namespace Employee_Ogranization.Repositories.Implements
             houseHold.WardId = 26740;
             _db.HouseHolds.Add(houseHold);
             _db.SaveChanges();
-            registrationInterview.CandidateName = registrationInterviewRegister.CandidateName;
+            string[] arrListStr = registrationInterviewRegister.CandidateName.Split(' ');//tách trong chuỗi str trên khi gặp ký tự ' '
+            
+
+            registrationInterview.CandidateFirstName = arrListStr[arrListStr.Length - 1].Trim();
+            string candidateLastName= "";
+            for (int i = 0; i < arrListStr.Length - 1; i++)
+            {
+                candidateLastName = candidateLastName + arrListStr[i] + " ";
+            }
+            registrationInterview.CandidateLastName = candidateLastName.Trim();
             registrationInterview.IdentifyCard = registrationInterviewRegister.IdentifyCard;
             registrationInterview.Price = registrationInterviewRegister.RegistrationPrice;
             registrationInterview.CreatedAt = DateTime.Now;
@@ -45,15 +54,15 @@ namespace Employee_Ogranization.Repositories.Implements
             registrationInterview.TrainningCatergoryId = 1;
             registrationInterview.DegreeClassificationId = 1;
             registrationInterview.HighestLevelEducationId = 1;
-            registrationInterview.GraduatedAtSubject = 1;
+            
             registrationInterview.SubjectToInterviewId = 1;
             registrationInterview.InfomationTechnologyDegreeId = 1;
             registrationInterview.ForeignLanguageDegreeId = 1;
             registrationInterview.GraduationClassficationId = 1;
             registrationInterview.SpecializedTranningId = 1;
-            registrationInterview.IsHadNghiepVuSupham = true;
+            registrationInterview.IsHadNghiepVuSupham = false;
             registrationInterview.StatusWorkingInEducationId = 1;
-            registrationInterview.SubjectToInterviewId = 1;
+            
             if (registrationInterviewRegister.ManagementUnitId == 26)
             {
                 registrationInterview.Aspirations01DistrictId = 760;
@@ -61,7 +70,11 @@ namespace Employee_Ogranization.Repositories.Implements
                 registrationInterview.Aspirations03DistrictId = 770;
                 registrationInterview.SchoolDegreeIdExpectedTeach = 5;
             }
-            registrationInterview.SchoolDegreeIdExpectedTeach = 2;
+            else
+            {
+                registrationInterview.SchoolDegreeIdExpectedTeach = 2;
+            }
+            
             _db.RegistrationInterviews.Add(registrationInterview);
             _db.SaveChanges();
             return GetRegistrationInterviewById(registrationInterview.Id);
@@ -99,6 +112,30 @@ namespace Employee_Ogranization.Repositories.Implements
             return registrationInterview;
         }
 
+        public RegistrationInterview GetRegistrationInterviewByIdWithDetail(int id)
+        {
+            RegistrationInterview registrationInterview = _db.RegistrationInterviews.Include("CurrentLivingAddress.Ward.District.Province")
+                .Include("HouseHold.Ward.District.Province")
+                .Include("DegreeClassification")
+                .Include("District")
+                .Include("District1")
+                .Include("District2")
+                .Include("District2")
+                .Include("ForeignLanguageCertification")
+                .Include("GraduationClassfication")
+                .Include("HighestLevelEducation")
+                .Include("InfomationTechnologyDegree")
+                .Include("ManagementUnit")
+                .Include("SchoolDegree")
+                .Include("SpecializedTraining")
+                .Include("StatusWorikingInEducation")
+                .Include("Subject.PositionInterview")
+                .Include("TrainningCategory")
+                
+                .SingleOrDefault(s => s.Id == id);
+            return registrationInterview;
+        }
+
         public int IsvalidToRegistrationInterview(string identifyCard)
         {
             //throw new NotImplementedException();
@@ -129,37 +166,41 @@ namespace Employee_Ogranization.Repositories.Implements
         {
             RegistrationInterview registrationInterview = GetRegistrationInterviewById(registrationInterviewDTO.Id);
             
-            registrationInterview.CandidateName = registrationInterviewDTO.CandidateName;
-            
+            registrationInterview.CandidateFirstName = registrationInterviewDTO.CandidateFirstName;
+            registrationInterview.CandidateLastName = registrationInterviewDTO.CandidateLastName;
             registrationInterview.UpdatedAt = DateTime.Now;
-            registrationInterview.IdentifyCard = registrationInterviewDTO.IdentifyCard;
             registrationInterview.DOB = registrationInterviewDTO.DOB;
             registrationInterview.PhoneNumber = registrationInterviewDTO.PhoneNumber;
-            if (registrationInterviewDTO.Aspirations01DistrictId != null && registrationInterviewDTO.Aspirations02DistrictId != null && registrationInterviewDTO.Aspirations03DistrictId != null)
+            registrationInterview.SubjectToInterviewId = registrationInterview.SubjectToInterviewId;
+            if (registrationInterviewDTO.CreatedAtManagementUnitId == 26)
             {
                 registrationInterview.Aspirations01DistrictId = registrationInterviewDTO.Aspirations01DistrictId;
                 registrationInterview.Aspirations02DistrictId = registrationInterviewDTO.Aspirations02DistrictId;
                 registrationInterview.Aspirations03DistrictId = registrationInterviewDTO.Aspirations03DistrictId;
-
-            }
-            registrationInterview.Email = registrationInterviewDTO.Email;
-            registrationInterview.ForeignLanguageDegreeId = registrationInterviewDTO.ForeignLanguageDegreeId;
-            registrationInterview.ReligionId = registrationInterviewDTO.ReligionId;
-            registrationInterview.IsMale = registrationInterviewDTO.IsMale;
-            registrationInterview.DegreeClassificationId = registrationInterviewDTO.DegreeClassificationId;
-            registrationInterview.GraduatedAtYear = registrationInterviewDTO.GraduatedAtYear;
-            registrationInterview.CurrentLivingAddressId = registrationInterviewDTO.CurrentLivingAddressId;
-            registrationInterview.HouseHoldId = registrationInterviewDTO.HouseHoldId;
-            registrationInterview.GraduatedAtSubject = registrationInterviewDTO.GraduatedAtSubject;
-            if (registrationInterviewDTO.SchoolDegreeIdExpectedTeach != null)
-            {
-                registrationInterview.SchoolDegreeIdExpectedTeach = registrationInterviewDTO.SchoolDegreeIdExpectedTeach;
-
+                registrationInterview.SchoolDegreeIdExpectedTeach = 5;
             }
             else
             {
-                registrationInterview.SchoolDegreeIdExpectedTeach = 3;
+                registrationInterview.SchoolDegreeIdExpectedTeach = registrationInterviewDTO.SchoolDegreeIdExpectedTeach;
             }
+            
+            registrationInterview.Email = registrationInterviewDTO.Email;
+            registrationInterview.ForeignLanguageDegreeId = registrationInterviewDTO.ForeignLanguageDegreeId;
+            
+            registrationInterview.IsMale = registrationInterviewDTO.IsMale;
+            registrationInterview.DegreeClassificationId = registrationInterviewDTO.DegreeClassificationId;
+            registrationInterview.GraduatedAtYear = registrationInterviewDTO.GraduatedAtYear;
+            
+      
+            CurrentLivingAddress currentLivingAddress = _db.CurrentLivingAddresses.Where(s => s.Id == registrationInterview.CurrentLivingAddressId).SingleOrDefault();
+            currentLivingAddress.WardId = registrationInterviewDTO.CurrentLivingAddressId;
+            currentLivingAddress.HouseNumber = registrationInterviewDTO.CurrentLivingAddressHouseNumber;
+            HouseHold houseHold = _db.HouseHolds.Where(s => s.Id == registrationInterview.HouseHoldId).SingleOrDefault();
+            houseHold.WardId = registrationInterviewDTO.HouseHoldId;
+            houseHold.HouseNumber = registrationInterviewDTO.HouseHoldHouseNumber;
+
+            registrationInterview.StatusWorkingInEducationId = registrationInterviewDTO.StatusWorkingInEducationId;
+            registrationInterview.GraduationClassficationId = registrationInterviewDTO.GraduationClassficationId;
             registrationInterview.SpecializedTranningId = registrationInterviewDTO.SpecializedTranningId;
             registrationInterview.IsNienChe = registrationInterviewDTO.IsNienChe;
             registrationInterview.GPA = registrationInterviewDTO.GPA;
@@ -169,7 +210,20 @@ namespace Employee_Ogranization.Repositories.Implements
             }
             registrationInterview.TrainningCatergoryId = registrationInterviewDTO.TrainningCatergoryId;
             registrationInterview.HighestLevelEducationId = registrationInterviewDTO.HighestLevelEducationId;
+            if (registrationInterviewDTO.TrainningCatergoryId == 1 || registrationInterviewDTO.TrainningCatergoryId == 3 || registrationInterviewDTO.TrainningCatergoryId == 5)
+            {
+                registrationInterview.IsHadNghiepVuSupham = true;
+            }
+            registrationInterview.InfomationTechnologyDegreeId = registrationInterviewDTO.InfomationTechnologyDegreeId;
+            registrationInterview.GraduationClassficationId = registrationInterview.GraduationClassficationId;
+            
+            registrationInterview.NamVaoNghanh = registrationInterviewDTO.NamVaoNghanh;
+            registrationInterview.MaNgach = registrationInterviewDTO.MaNgach;
+            registrationInterview.MocNangLuongLansau = registrationInterviewDTO.MocNangLuongLansau;
+            registrationInterview.HeSoLuong = registrationInterviewDTO.HeSoLuong;
             _db.Entry(registrationInterview).State = EntityState.Modified;
+            _db.Entry(currentLivingAddress).State = EntityState.Modified;
+            _db.Entry(houseHold).State = EntityState.Modified;
             try
             {
                 _db.SaveChanges();
@@ -179,7 +233,7 @@ namespace Employee_Ogranization.Repositories.Implements
                 return registrationInterview = null;
             }
 
-            return GetRegistrationInterviewById(registrationInterview.Id);
+            return GetRegistrationInterviewByIdWithDetail(registrationInterview.Id);
         }
 
         public RegistrationInterview UpdateRegistrationInterviewApprovedBy(RegistrationInterviewDTO registrationInterviewDTO)
@@ -188,8 +242,8 @@ namespace Employee_Ogranization.Repositories.Implements
             registrationInterview.IsPass = registrationInterviewDTO.IsPass;
             registrationInterview.ReviewedBy = registrationInterviewDTO.ReviewedBy;
             registrationInterview.DateInterview = DateTime.Now;
-            registrationInterview.CandidateName = registrationInterviewDTO.CandidateName;
-            registrationInterview.IdentifyCard = registrationInterviewDTO.IdentifyCard;
+            registrationInterview.CandidateFirstName = registrationInterviewDTO.CandidateFirstName;
+            registrationInterview.CandidateLastName = registrationInterviewDTO.CandidateLastName;
             registrationInterview.DOB = registrationInterviewDTO.DOB;
             registrationInterview.PhoneNumber = registrationInterviewDTO.PhoneNumber;
             if (registrationInterviewDTO.Aspirations01DistrictId != null && registrationInterviewDTO.Aspirations02DistrictId != null && registrationInterviewDTO.Aspirations03DistrictId != null)
@@ -201,13 +255,13 @@ namespace Employee_Ogranization.Repositories.Implements
             }
             registrationInterview.Email = registrationInterviewDTO.Email;
             registrationInterview.ForeignLanguageDegreeId = registrationInterviewDTO.ForeignLanguageDegreeId;
-            registrationInterview.ReligionId = registrationInterviewDTO.ReligionId;
+         
             registrationInterview.IsMale = registrationInterviewDTO.IsMale;
             registrationInterview.DegreeClassificationId = registrationInterviewDTO.DegreeClassificationId;
             registrationInterview.GraduatedAtYear = registrationInterviewDTO.GraduatedAtYear;
             registrationInterview.CurrentLivingAddressId = registrationInterviewDTO.CurrentLivingAddressId;
             registrationInterview.HouseHoldId = registrationInterviewDTO.HouseHoldId;
-            registrationInterview.GraduatedAtSubject = registrationInterviewDTO.GraduatedAtSubject;
+            
             if (registrationInterviewDTO.SchoolDegreeIdExpectedTeach != null)
             {
                 registrationInterview.SchoolDegreeIdExpectedTeach = registrationInterviewDTO.SchoolDegreeIdExpectedTeach;

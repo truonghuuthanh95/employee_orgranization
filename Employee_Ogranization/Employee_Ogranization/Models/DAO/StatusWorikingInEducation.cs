@@ -15,7 +15,6 @@ namespace Employee_Ogranization.Models.DAO
             RegistrationInterviews = new HashSet<RegistrationInterview>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [StringLength(200)]

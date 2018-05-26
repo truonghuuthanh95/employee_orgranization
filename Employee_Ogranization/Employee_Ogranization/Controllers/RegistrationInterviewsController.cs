@@ -15,6 +15,9 @@ using System.Web.Http.Description;
 using Employee_Ogranization.Models.DAO;
 using Employee_Ogranization.Models.DTO;
 using Employee_Ogranization.Repositories.Interfaces;
+using Employee_Ogranization.Service;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace Employee_Ogranization.Controllers
 {
@@ -105,12 +108,16 @@ namespace Employee_Ogranization.Controllers
         }
         [Route("exportPDFRegistrationInterview/{id}")]
         [HttpGet]
-        public async Task<HttpResponseMessage> ExportPDFRegistrationInterview(int id)
+        public HttpResponseMessage ExportPDFRegistrationInterview(int id)
         {
-            string fileName = string.Concat("test.pdf");
-            string filePath = HttpContext.Current.Server.MapPath("~/Service/" + fileName);
-            //await ExportPDF.GeneratePDF(filePath);
-
+            string fileName = string.Concat(id+".pdf");
+            Document doc = new Document(PageSize.A4);
+            var output = new FileStream(HttpContext.Current.Server.MapPath("~/Service/PDF/" + fileName), FileMode.Create);
+            var writer = PdfWriter.GetInstance(doc, output);
+            writer.Close();
+            //doc.Close();
+            ExportPDF.GenerateCandidatePDF(id);
+            string filePath = HttpContext.Current.Server.MapPath("~/Service/PDF/" + fileName);
             HttpResponseMessage result = null;
             result = Request.CreateResponse(HttpStatusCode.OK);
             result.Content = new StreamContent(new FileStream(filePath, FileMode.Open));

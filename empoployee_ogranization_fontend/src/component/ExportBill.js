@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
 import moment from "moment";
-import PropTypes from "prop-types";
 class ExportBill extends Component {
   constructor(props) {
     super(props);
@@ -15,12 +14,7 @@ class ExportBill extends Component {
       registrationId,
       registrationPrice
     } = this.props.dataToprint;
-    console.log()
-        console.log( managementUnit !== undefined &&
-        candidateName !== undefined &&
-        identifyCard !== undefined &&
-        registrationId !== undefined &&
-        registrationPrice !== undefined)
+   
     if (
         candidateName !== undefined &&
         identifyCard !== undefined &&
@@ -106,7 +100,7 @@ class ExportBill extends Component {
                 <b>
                   {registrationPrice !== "" ? registrationPrice.Address : null}
                 </b>{" "}
-                vào ngày <b>22/12/2018</b> để rà xoát hồ sơ (<i>
+                vào ngày <b>{moment(registrationPrice.DateComeTo).format('DD/MM/YYYY')}</b> để rà xoát hồ sơ (<i>
                   Mục đích là để đối chiếu hồ sơ với bản khai. Vui lòng tới đúng
                   giờ
                 </i>)

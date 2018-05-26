@@ -18,7 +18,7 @@ namespace Employee_Ogranization.Repositories.Implements
 
         public List<Subject> GetSubjects()
         {
-            List<Subject> subjects = _db.Subjects.Where(s => s.IsActive == true).ToList();
+            List<Subject> subjects = _db.Subjects.Include("PositionInterview").Where(s => s.IsActive == true).OrderBy(s => s.Name).ToList();
             return subjects;
         }
     }

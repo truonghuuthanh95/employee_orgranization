@@ -14,6 +14,7 @@ namespace Employee_Ogranization.Models.DAO
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<ContactInfomation> ContactInfomations { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<CurrentLivingAddress> CurrentLivingAddresses { get; set; }
         public virtual DbSet<DegreeClassification> DegreeClassifications { get; set; }
@@ -24,6 +25,7 @@ namespace Employee_Ogranization.Models.DAO
         public virtual DbSet<HouseHold> HouseHolds { get; set; }
         public virtual DbSet<InfomationTechnologyDegree> InfomationTechnologyDegrees { get; set; }
         public virtual DbSet<ManagementUnit> ManagementUnits { get; set; }
+        public virtual DbSet<PositionInterview> PositionInterviews { get; set; }
         public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<RegistrationInterview> RegistrationInterviews { get; set; }
@@ -93,6 +95,14 @@ namespace Employee_Ogranization.Models.DAO
                 .WithOptional(e => e.ManagementUnit)
                 .HasForeignKey(e => e.CreatedAtManagementUnitId);
 
+            modelBuilder.Entity<PositionInterview>()
+                .Property(e => e.Name)
+                .IsFixedLength();
+
+            modelBuilder.Entity<PositionInterview>()
+                .Property(e => e.IsActive)
+                .IsFixedLength();
+
             modelBuilder.Entity<Province>()
                 .HasMany(e => e.Districts)
                 .WithRequired(e => e.Province)
@@ -102,6 +112,10 @@ namespace Employee_Ogranization.Models.DAO
                 .HasMany(e => e.RegistrationInterviews)
                 .WithOptional(e => e.Province)
                 .HasForeignKey(e => e.UniversityLocation);
+
+            modelBuilder.Entity<RegistrationInterview>()
+                .Property(e => e.CandidateLastName)
+                .IsFixedLength();
 
             modelBuilder.Entity<ReligionCategory>()
                 .HasMany(e => e.RegistrationInterviews)
@@ -132,11 +146,6 @@ namespace Employee_Ogranization.Models.DAO
                 .HasMany(e => e.RegistrationInterviews)
                 .WithOptional(e => e.Subject)
                 .HasForeignKey(e => e.SubjectToInterviewId);
-
-            modelBuilder.Entity<Subject>()
-                .HasMany(e => e.RegistrationInterviews1)
-                .WithOptional(e => e.Subject1)
-                .HasForeignKey(e => e.GraduatedAtSubject);
 
             modelBuilder.Entity<TrainningCategory>()
                 .HasMany(e => e.RegistrationInterviews)

@@ -115,6 +115,13 @@
   .checkIDBox {
     padding-top: 50px;
   }
+  .login-backgound {
+    background-color: #928f8f;
+    height: 550px;
+  }
+  .login-box {
+    margin-top: 0;
+  }
 }
 .bill {
   padding-top: 35px;
@@ -126,3 +133,27 @@
 .warning-box{
     padding-top: 70px;
 }
+.header-a4 {
+  padding-bottom: 25px;
+}
+
+.a4-style{
+  font-size: 15px;
+}
+.signature {
+  padding-bottom: 50px;
+}
+.document-print {
+  padding: 35px;
+  font-family: 'Times New Roman';
+  line-height: 20px;
+}
+/* .a4-style > p {
+  
+}
+.a4-style > .row > .col-xs-6 > p {
+  font-size: 20px;
+}
+.a4-style > .row > .col-xs-4 > p {
+  font-size: 20px;
+} */

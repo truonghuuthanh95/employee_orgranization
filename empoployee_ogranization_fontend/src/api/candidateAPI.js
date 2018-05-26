@@ -13,7 +13,8 @@ import {
   GET_ALL_GRADUATIONCLASSFICATION,
   GET_ALL_FOREIGN_LANGUAGE_SPECTIFICATION,
   GET_ALL_STATUS_WORKING_ON_EDUCATION,
-  GET_SCHOOL_DEGREE
+  GET_SCHOOL_DEGREE,
+  UPDATE_REGISTRATION_INTERVIEW
 } from "./baseURL";
 
 export function checkIsValidToUpdateRegistrationInterview(id, identifyCard) {
@@ -76,6 +77,63 @@ export function getAllStatusWorkingInEducation() {
     res.json()
   );
 }
-export function getSchoolDegree(){
+export function getSchoolDegree() {
   return fetch(BASE_URL + GET_SCHOOL_DEGREE).then(res => res.json());
+}
+export function updateRegistrationInterview(
+  registrationInterview,
+  paramDOB,
+  currentLivingAddress,
+  houseHold
+) {
+  return fetch(BASE_URL + UPDATE_REGISTRATION_INTERVIEW, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      Id: registrationInterview.Id,
+      CandidateFirstName: registrationInterview.CandidateFirstName,
+      CandidateLastName: registrationInterview.CandidateLastName,
+      DOB: paramDOB,
+      CreatedAtManagementUnitId:
+        registrationInterview.CreatedAtManagementUnitId,
+      PhoneNumber: registrationInterview.PhoneNumber,
+      Aspirations01DistrictId: registrationInterview.Aspirations01DistrictId,
+      Aspirations02DistrictId: registrationInterview.Aspirations02DistrictId,
+      Aspirations03DistrictId: registrationInterview.Aspirations03DistrictId,
+      Email: registrationInterview.Email,
+      SubjectToInterviewId: registrationInterview.SubjectToInterviewId,
+      ForeignLanguageDegreeId: registrationInterview.ForeignLanguageDegreeId,
+      InfomationTechnologyDegreeId:
+        registrationInterview.InfomationTechnologyDegreeId,
+      IsMale: registrationInterview.IsMale,
+      DegreeClassificationId: registrationInterview.DegreeClassificationId,
+      GraduatedAtYear: registrationInterview.GraduatedAtYear,
+      CurrentLivingAddressId: currentLivingAddress.Ward.Id,
+      HouseHoldId: houseHold.Ward.Id,
+      SchoolDegreeIdExpectedTeach:
+        registrationInterview.SchoolDegreeIdExpectedTeach,
+      SpecializedTranningId: registrationInterview.SpecializedTranningId,
+      IsNienChe: registrationInterview.IsNienChe,
+      GPA: registrationInterview.GPA,
+      CaptionProjectPoint: registrationInterview.CaptionProjectPoint,
+      TrainningCatergoryId: registrationInterview.TrainningCatergoryId,
+      HighestLevelEducationId: registrationInterview.HighestLevelEducationId,
+
+      UniversityLocation: registrationInterview.UniversityLocation,
+      UniversityName: registrationInterview.UniversityName,
+      GraduationClassficationId:
+        registrationInterview.GraduationClassficationId,
+      IsHadNghiepVuSupham: registrationInterview.IsHadNghiepVuSupham,
+      StatusWorkingInEducationId:
+        registrationInterview.StatusWorkingInEducationId,
+      CurrentLivingAddressHouseNumber: currentLivingAddress.HouseNumber,
+      HouseHoldHouseNumber: houseHold.HouseNumber,
+      NamVaoNghanh: registrationInterview.NamVaoNghanh,
+      MaNgach: registrationInterview.MaNgach,
+      HeSoLuong: registrationInterview.HeSoLuong,
+      MocNangLuongLansau: registrationInterview.MocNangLuongLansau,
+    })
+  }).then(res => res.json());
 }
