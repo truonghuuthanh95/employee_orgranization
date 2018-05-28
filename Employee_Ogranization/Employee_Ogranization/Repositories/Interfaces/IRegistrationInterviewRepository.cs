@@ -9,7 +9,6 @@ namespace Employee_Ogranization.Repositories.Interfaces
 {
     public interface IRegistrationInterviewRepository
     {
-        int IsvalidToRegistrationInterview(String identifyCard);
         RegistrationInterview CreateRegistrationInterview(RegistrationInterviewRegister registrationInterviewRegister);
         RegistrationInterview GetRegistrationInterviewById(int id);
         List<RegistrationInterview> GetRegistrationInterviewByIdentidfyCard(string identifyCard);

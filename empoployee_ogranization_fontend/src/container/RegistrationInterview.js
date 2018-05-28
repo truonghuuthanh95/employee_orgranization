@@ -543,24 +543,24 @@ class RegistrationInterview extends Component {
     if (
       isAgree !== true ||
       (IsHadNghiepVuSupham === "false" &&
-        GraduationClassficationId === "2" &&
+        GraduationClassficationId == "2" &&
         positionInterview.PositionInterview.Id == "2") ||
       (IsHadNghiepVuSupham === "false" &&
-        GraduationClassficationId === "4" &&
+        GraduationClassficationId == "4" &&
         positionInterview.PositionInterview.Id == "2") ||
       (IsHadNghiepVuSupham === "false" &&
-        GraduationClassficationId === "6" &&
+        GraduationClassficationId == "6" &&
         positionInterview.PositionInterview.Id == "2")
     ) {
       if (
         (IsHadNghiepVuSupham === "false" &&
-          GraduationClassficationId === "2" &&
+          GraduationClassficationId == "2" &&
           positionInterview.PositionInterview.Id == "2") ||
         (IsHadNghiepVuSupham === "false" &&
-          GraduationClassficationId === "4" &&
+          GraduationClassficationId == "4" &&
           positionInterview.PositionInterview.Id == "2") ||
         (IsHadNghiepVuSupham === "false" &&
-          GraduationClassficationId === "6" &&
+          GraduationClassficationId == "6" &&
           positionInterview.PositionInterview.Id == "2")
       ) {
         this.setState({
@@ -1204,8 +1204,8 @@ class RegistrationInterview extends Component {
                             }
                             name="IsNienChe"
                           >
-                            <option value={true}>Qui chế niên chế</option>
-                            <option value={false}>Qui chế tín chỉ</option>
+                            <option value='true'>Qui chế niên chế</option>
+                            <option value='false'>Qui chế tín chỉ</option>
                           </FormControl>
                         </FormGroup>
                       </Col>
@@ -1234,7 +1234,7 @@ class RegistrationInterview extends Component {
                           <HelpBlock>{this.state.errorAVG}</HelpBlock>
                         </FormGroup>
                       </Col>
-                      {this.state.registrationInterview.IsNienChe === "true" ? (
+                      {this.state.registrationInterview.IsNienChe == 'true' ||  this.state.registrationInterview.IsNienChe == true? (
                         <Col sm={4}>
                           <FormGroup
                             controlId="formControlsSelect"

@@ -126,5 +126,21 @@ namespace Employee_Ogranization.Controllers
 
             return result;
         }
+
+        [Route("isValidToApproved/{id}")]
+        [HttpGet]
+        public ResponseResult IsValidToApproved(int id)
+        {
+            RegistrationInterview registrationInterview = registrationInterviewRepository.GetRegistrationInterviewById(id);
+            if (registrationInterview.CreatedAt.Value.Year < DateTime.Now.Year)
+            {
+                return new ResponseResult(403, "Hồ sơ này đã quá hạn để rà xoát", null);
+            }
+            else if (registrationInterview.ReviewedBy != null)
+            {
+                return new ResponseResult(403, "Hồ sơ này đã được xác nhận hợp lệ trước đó", null);
+            }
+            return new ResponseResult(200, "success", registrationInterview);
+        }
     }
 }
