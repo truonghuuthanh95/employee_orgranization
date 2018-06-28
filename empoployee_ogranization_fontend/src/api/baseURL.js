@@ -1,7 +1,7 @@
-export const BASE_URL = 'http://api.tuyendung.hcm.edu.vn/api/';
-// export const BASE_URL = 'http://localhost:54412/api/';
-// export const LOG_IN = 'http://localhost:54412/token';
-export const LOG_IN = 'http://api.tuyendung.hcm.edu.vn/token';
+// export const BASE_URL = 'http://api.tuyendung.hcm.edu.vn/api/';
+export const BASE_URL = 'http://localhost:54412/api/';
+export const LOG_IN = 'http://localhost:54412/token';
+// export const LOG_IN = 'http://api.tuyendung.hcm.edu.vn/token';
 export const GET_REGISTRATION_PRICE_BY_MANAGEMENTUNIT_ID = 'price/getRegistrationPriceByManagemenentUnitId';
 export const CHECK_IDENTIFY_CARD = 'registrationInterview/IsValidToRegistrationInterview';
 export const CREATE_REGISTRATION_INTERVIEW = 'registrationInterview/create';
@@ -21,3 +21,4 @@ export const GET_ALL_FOREIGN_LANGUAGE_SPECTIFICATION = 'foreignLanguageCertifica
 export const GET_ALL_STATUS_WORKING_ON_EDUCATION = 'statusWorikingInEducation/getAllStatusWorikingInEducation';
 export const GET_SCHOOL_DEGREE = 'schoolDegree/getSchoolDegreeForManagementUnit';
 export const UPDATE_REGISTRATION_INTERVIEW = 'registrationInterview/update';
+export const GET_ALL_CANDIDATE_REGISTED_BY_MANAGEMENTUNIT_ID = 'registrationInterview/getAllCandidateRegistedByManagementUnitId'

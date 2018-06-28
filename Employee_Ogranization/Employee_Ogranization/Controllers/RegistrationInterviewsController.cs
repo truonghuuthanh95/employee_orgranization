@@ -74,10 +74,12 @@ namespace Employee_Ogranization.Controllers
             }
             return new ResponseResult(200, "success", registrationInterview);
         }
-        
+
         //POST: api/RegistrationInterviews
+        //[AllowAnonymous]
         [Route("create")]
         [HttpPost]
+        [HttpOptions]
         public ResponseResult PostRegistrationInterview(RegistrationInterviewRegister registrationInterviewRegister)
         {
 
@@ -90,8 +92,10 @@ namespace Employee_Ogranization.Controllers
             return new ResponseResult(201, "created", registrationInterview);
             
         }
+        //[AllowAnonymous]
         [Route("update")]
         [HttpPost]
+        [HttpOptions]
         public ResponseResult UpdateRegistrationInterview(RegistrationInterviewDTO registrationInterviewDTO)
         {
             if (!ModelState.IsValid)
@@ -141,6 +145,13 @@ namespace Employee_Ogranization.Controllers
                 return new ResponseResult(403, "Hồ sơ này đã được xác nhận hợp lệ trước đó", null);
             }
             return new ResponseResult(200, "success", registrationInterview);
+        }
+        [Route("getAllCandidateRegistedByManagementUnitId/{id}")]
+        [HttpGet]
+        public ResponseResult GetAllCandidateRegistedByManagementUnitId(int id)
+        {
+            List<RegistrationInterview> registrationInterviews = registrationInterviewRepository.GetAllRegistrationInterviewByManagementUnitId(id);
+            return new ResponseResult(200, "success", registrationInterviews);
         }
     }
 }

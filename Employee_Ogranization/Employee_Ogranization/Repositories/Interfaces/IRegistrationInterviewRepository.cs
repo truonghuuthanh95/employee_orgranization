@@ -16,5 +16,6 @@ namespace Employee_Ogranization.Repositories.Interfaces
         RegistrationInterview GetRegistrationInterviewByIdAndIdentifyCard(int id, string identifyCard);
         RegistrationInterview UpdateRegistrationInterviewApprovedBy(RegistrationInterviewDTO registrationInterviewDTO);
         RegistrationInterview GetRegistrationInterviewByIdWithDetail(int id);
+        List<RegistrationInterview> GetAllRegistrationInterviewByManagementUnitId(int id);
     }
 }

@@ -5,7 +5,7 @@ import {
   CREATE_REGISTRATION_INTERVIEW,
   GET_MANAGEMENT_UNIT_BY_ID
 } from "./baseURL";
-
+import $ from 'jquery'; 
 export function getRegistrationPriceByMananagementUnitId(id) {
   return fetch(
     `${BASE_URL + GET_REGISTRATION_PRICE_BY_MANAGEMENTUNIT_ID}/${id}`

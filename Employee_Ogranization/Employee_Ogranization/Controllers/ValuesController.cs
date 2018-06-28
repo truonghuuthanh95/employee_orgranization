@@ -22,8 +22,10 @@ namespace Employee_Ogranization.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        [Route("api/value")]
+        public string Post(string user)
         {
+            return user;
         }
 
         // PUT api/values/5

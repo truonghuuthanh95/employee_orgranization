@@ -19,6 +19,14 @@ import {
   Row,
   Glyphicon
 } from "react-bootstrap";
+import $ from 'jquery'; 
+import {
+  BASE_URL,
+  GET_REGISTRATION_PRICE_BY_MANAGEMENTUNIT_ID,
+  CHECK_IDENTIFY_CARD,
+  CREATE_REGISTRATION_INTERVIEW,
+  GET_MANAGEMENT_UNIT_BY_ID
+} from "../api/baseURL";
 import Header from "../component/Header";
 class CashierExportBill extends Component {
   constructor(props) {
@@ -49,10 +57,10 @@ class CashierExportBill extends Component {
   async componentDidMount() {
     const account = JSON.parse(sessionStorage.getItem("user"));
     if (account === null) {
-      this.props.history.push("/login");
+      this.props.history.push("/#/login");
     } else if (account.RoleName !== 'admin' && account.RoleName !== 'cashier') {
       sessionStorage.removeItem('user');
-      this.props.history.push("/login");
+      this.props.history.push("/#/login");
     }else {
       await getRegistrationPriceByMananagementUnitId(1).then(res =>
         this.setState({ registrationPrice: res })
@@ -119,13 +127,31 @@ class CashierExportBill extends Component {
       this.setState({ errorCandidateName: "" });
       const account = JSON.parse(sessionStorage.getItem("user"));
       const { identifyCard, registrationPrice, candidateName } = this.state;
+//       $.ajax({
+//         url: `${BASE_URL + CREATE_REGISTRATION_INTERVIEW}`,
+//         type: "POST",
+//         contentType: 'application/json',
+//         success: function(data) {
+// alert(data);
+//         },
+//         data: JSON.stringify({
+//               IdentifyCard: identifyCard,
+//               RegistrationPrice: registrationPrice,
+//               CandidateName: candidateName,
+//               ManagementUnitId: account.ManagementUnitId,
+//               CreatedBy: account.ManagementUnitId
+//             })
+//         //dataType: "application/json"
+//       });
       await createRegistrationInterview(
         identifyCard,
         registrationPrice.Value,
         candidateName,
         account.ManagementUnitId,
         account.AccountId
-      ).then(res => {
+      )
+      .then(res => {
+        debugger
         if (res.Status === 201) {
           this.setState({ registrationId: res.Results.Id });
         } else if (res.Status === 409) {

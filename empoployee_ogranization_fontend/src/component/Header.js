@@ -90,7 +90,7 @@ class Header extends Component {
             </Nav>
             {this.state.user === null ? (
               <Nav pullRight className="nav-link">
-                <LinkContainer to="/login" activeClassName="nothing">
+                <LinkContainer to="/#/login" activeClassName="nothing">
                   <NavItem eventKey={1}>
                     <Glyphicon glyph="log-in" /> Đăng Nhập
                   </NavItem>

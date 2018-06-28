@@ -80,6 +80,15 @@ namespace Employee_Ogranization.Repositories.Implements
             return GetRegistrationInterviewById(registrationInterview.Id);
         }
 
+        public List<RegistrationInterview> GetAllRegistrationInterviewByManagementUnitId(int id)
+        {
+            List<RegistrationInterview> registrationInterviews = _db.RegistrationInterviews
+                .Where(s => s.CreatedAtManagementUnitId == id)
+                .Where(s => s.CreatedAt.Value.Year == DateTime.Now.Year)
+                .ToList();
+            return registrationInterviews;
+        }
+
         public RegistrationInterview GetRegistrationInterviewById(int id)
         {
             var registrationInterview = _db.RegistrationInterviews

@@ -33,9 +33,8 @@ namespace Employee_Ogranization
             container.RegisterType<IGraduationClassficationRepository, GraduationClassficationRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<IStatusWorikingInEducationRepository, StatusWorikingInEducationRepository>(new HierarchicalLifetimeManager());
             container.RegisterType<ISchoolDegreeRepository, SchoolDegreeRepository>(new HierarchicalLifetimeManager());
-            config.DependencyResolver = new UnityResolver(container);
-            
-            
+            config.DependencyResolver = new UnityResolver(container);           
+          
             
             // Web API configuration and services
             //var cors = new EnableCorsAttribute("http://localhost:3000", "*", "*");
